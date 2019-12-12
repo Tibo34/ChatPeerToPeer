@@ -2,11 +2,14 @@
 public class ControllerChat {
 	
 	private Client client;
-	private Server server;
 	private FrameChat frame;
+	private Thread threadServer;
+	private Thread threadClient;
+	
 	
 	public ControllerChat() {
-		server=new Server();
+			
+		
 	}
 	
 	
