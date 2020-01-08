@@ -1,13 +1,17 @@
+package Client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientSender {
+import Controller.ControllerChat;
+import frames.FrameChat;
+
+public class ClientSender implements Runnable{
 	
 	private Socket socketSend;
 	private ObjectOutputStream output; // stream data out
-	private ObjectInputStream input; // stream data in
+	 private User user;
 	
 	public ClientSender(Socket socket) {
 		socketSend=socket;
@@ -16,6 +20,7 @@ public class ClientSender {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		sendMessage(user+" connecté");
 	}
 	
 	private void setupStreams() throws IOException{
@@ -31,9 +36,29 @@ public class ClientSender {
 		        return true;
 		    }catch(IOException ioexception){
 		    	ioexception.printStackTrace();
-		        //theChatWindow.append("\n ERROR: Message cant send");
+		    	FrameChat frame=ControllerChat.getController().getFrame();
+		    	frame.showMessage("\n ERROR: Message cant send");
 		    	return false;
 		    }
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		public void close() {
+			try {
+				socketSend.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		public void setUser(User u) {
+			user=u;			
 		}
 
 }

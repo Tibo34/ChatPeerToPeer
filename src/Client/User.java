@@ -1,12 +1,12 @@
+package Client;
 
 public class User {
 	
-	private String ip;
+	
 	private String name;
 	
 	
-	public User(String i,String n) {
-		ip=i;
+	public User(String n) {	
 		name=n;
 	}
 

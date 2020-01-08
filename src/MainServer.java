@@ -1,30 +1,23 @@
-import java.io.IOException;
-import java.net.ServerSocket;
+import ScannerLan.ScannerLan;
+import Serveur.Server;
 
 public class MainServer {
 	
 	public static void main(String[]args) {
-		ServerSocket socket=getPortFree(6000);
-		System.out.println(socket.getLocalPort());
-		if(socket!=null) {
-			Server server=new Server(socket);
-			Thread threadServer=new Thread(server);
-			threadServer.start();	
-		}
+	
+		String ip=ScannerLan.getIP();
+		String ipboard=ScannerLan.getBroadcast();	
+		String sub=ScannerLan.getSubnetMask();
+	
+	
+		System.out.println(" ip : "+ip+" ipbroad : "+ipboard+" sub : "+sub);
+		ScannerLan scanner=new ScannerLan();
+		scanner.enumLocalNetwork(ip);
+		//Server serve=Server.createServer();
+		
 	}
 	
-	public static ServerSocket getPortFree(int port) {		
-		ServerSocket socket=null;
-		boolean portOk=true;
-		for(int p=port ; p <= 65535&&portOk; p++){
-	         try {
-	        	 socket= new ServerSocket(p);	 
-	        	 portOk=false;
-	         } catch (IOException e) {
-	            System.err.println("Le port " + p + " est déjà utilisé ! ");
-	         }
-	      }		
-		return socket;
-	}
+
+	
 
 }

@@ -1,33 +1,45 @@
+package frames;
 import java.awt.BorderLayout;
+import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class FrameChat extends JFrame {
+import Client.Client;
+import Controller.ControllerChat;
+import Serveur.Server;
+
+public class FrameChat extends JFrame implements WindowListener {
 
 	
 	   private JTextField userInput; // 
 	   private JTextArea theChatWindow; //
+	   private JMenuBar menu;
+	  
+	  
 	   
 	   public FrameChat() {
 		   super("My Chat Service");
-		   userInput = new JTextField();
+		   menu=new MenuFrame();
+		   	userInput = new JTextField();
 		    userInput.setEditable(false); 
 		    userInput.addActionListener(new ActionListener(){
-
 		        public void actionPerformed(ActionEvent event){
 		            sendMessage(event.getActionCommand()); // string entered in the textfield
 		            userInput.setText(""); // reset text area to blank again
-
-
-		        }
+		         }
 		    });
-		    
+		   
+		    setJMenuBar(menu);
 		    
 		    theChatWindow = new JTextArea();
 		    add(new JScrollPane(theChatWindow));
@@ -45,8 +57,13 @@ public class FrameChat extends JFrame {
 		    setVisible(true);
 		}
 	   
+	   public static FrameChat initFrame() {
+		   FrameChat frame=new FrameChat();
+		   return frame;
+	   }
+	   
 	   public void sendMessage(String str) {
-		   
+		   ControllerChat.getController().getClient().sendMessage(str);
 	   }
 	   
 	// update the chat window (GUI)
@@ -71,7 +88,54 @@ public class FrameChat extends JFrame {
 		       );
 		}
 	   
-	   public static void main(String[]args) {
+	  
+
+	public static void main(String[]args) {
 		   FrameChat chat=new FrameChat();
 	   }
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		Server serv=Server.createServer();
+		serv.stop();
+		setVisible(false);
+		dispose();
+		System.exit(0);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		System.exit(0);
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
