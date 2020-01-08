@@ -17,6 +17,12 @@ public class ScannerLan {
 	
 	
 	 public static String NOT_SET = "NOT_SET";
+	 private String ipLocal;
+	 private int localPort=6000;
+	 
+	 public ScannerLan() {
+		 ipLocal=getIP();
+	 }
 
 	   public static boolean isEnabled(){
 	        try {
@@ -45,8 +51,18 @@ public class ScannerLan {
 	        }
 	        return false;
 	    }
+	   
+	   public ArrayList<String> scanLocal() {
+		   ArrayList<String> ips=new ArrayList<String>();
+		   if(isConnected()) {
+			   ips=enumLocalNetwork();
+		   }
+		   return ips;
+	   }
 
-	    public static boolean isConnected(){
+	   
+		
+		public static boolean isConnected(){
 	        try {
 	            String state;
 	            ProcessBuilder builder = new ProcessBuilder(
@@ -201,43 +217,46 @@ public class ScannerLan {
 	     *
 	     * @param iproot plage de départ du scan
 	     */
-	    public void enumLocalNetwork(String iproot) {
+	    public ArrayList<String> enumLocalNetwork() {
 	        //Test base Ip valide
-	        String[] nip = iproot.split("\\.");
+	        String[] nip = ipLocal.split("\\.");
+	        ArrayList<String> ipConnected=new ArrayList<String>();
 	       
 	        if (nip.length != 4) {
 	            System.out.println("Base Ip incorrecte !!! exemple 192.168.2.0");
-	            return;
+	            return ipConnected;
 	        }
 	 
 	        //timer
-	        int ifound = 0;
-	        Long timestart = System.currentTimeMillis();
+	       // int ifound = 0;
+	        //Long timestart = System.currentTimeMillis();
 	 
 	        //Entete du tableau
-	        System.out.printf("%-16s %-30s %-10s \n", "Adresse ip", "Nom du poste", "Port ouvert");
+	        //System.out.printf("%-16s %-30s %-10s \n", "Adresse ip", "Nom du poste", "Port ouvert");
 	        byte[] ip = {(byte) Integer.parseInt(nip[0]), (byte) Integer.parseInt(nip[1]),
 	            (byte) Integer.parseInt(nip[2]), (byte) 0};
+	        byte local=ip[3];
 	 
 	        //Boucle sur l'ensemble du masque réseau
 	        for (int i = 0; i < 255; i++) {
 	            ip[3] = (byte) i;
-	            try {
-	                InetAddress addr = InetAddress.getByAddress(ip);
-	                if (isAlive(addr.getHostAddress())) {
-	                    System.out.printf("%-16s %-30s %-10s \n", addr.getHostAddress(),
-	                            addr.getHostName(), scanPort(addr.getHostAddress()));
-	                    ifound++;
-	                } else {
-	                    // System.out.println(addr.getHostAddress() + " empty");
-	                }
-	            } catch (UnknownHostException e) {
-	                System.out.println(e.getMessage());
+	            if((byte)i!=local) {			            
+			       try {
+		                InetAddress addr = InetAddress.getByAddress(ip);	                
+		                if (isAlive(addr.getHostAddress())&&portIsOpen(addr.getHostAddress(), localPort, 1)) {
+		                	ipConnected.add(addr.getHostAddress());
+		                	System.out.println(addr.getHostAddress()+" connecté!");
+		                   // System.out.printf("%-16s %-30s %-10s \n", addr.getHostAddress(),
+		                     //       addr.getHostName(), scanPort(addr.getHostAddress()));
+		                    //ifound++;
+		                } 
+		            } catch (UnknownHostException e) {
+		                System.out.println(e.getMessage());
+		            }
 	            }
-	        }
-	        Long timeelapse = System.currentTimeMillis() - timestart;
-	        System.out.println(ifound + " postes détectés sur le réseau "
-	                + iproot + " en " + Math.round(timeelapse / 1000) + " secondes");
+	        }	       
+	        System.out.println(ipConnected.size()+ " personnes connecté!");
+	        return ipConnected;
 	    }
 	    
 

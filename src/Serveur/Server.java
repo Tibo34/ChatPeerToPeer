@@ -1,11 +1,14 @@
 package Serveur;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+
 
 import javax.swing.JFrame;
 
 import Client.Client;
 import Controller.ControllerChat;
+import ScannerLan.ScannerLan;
 import Utile.Utility;
 import frames.FrameChat;
 
@@ -18,10 +21,12 @@ public class Server implements Runnable {
 	private static Server instance;
 	private Thread thread;
 	private FrameChat frame;
+	private ArrayList<String> ipsConnect;
 	
 	private Server() {
-		server=Utility.getServerSocketPortFree(6000);
-		frame=FrameChat.initFrame();
+		server=Utility.getServerSocketPortFree(6000);	
+		ipsConnect=new ScannerLan().scanLocal();
+		frame=FrameChat.initFrame(server.getLocalPort(),ipsConnect);
 	}
 	
 	public void startServer() {
