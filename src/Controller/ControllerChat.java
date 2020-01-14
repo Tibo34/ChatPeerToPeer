@@ -1,12 +1,20 @@
 package Controller;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+
 import Client.Client;
+import Client.Message;
+import Client.User;
 import Serveur.Server;
-import frames.FrameChat;
+import frames.Frame;
+
 
 public class ControllerChat {
 	
-	private Client client;
-	private FrameChat frame;
+	
+	private ArrayList<Client> clients;
+	private Frame frame;
 	private Server serve;
 	
 	private static ControllerChat instance;
@@ -23,20 +31,25 @@ public class ControllerChat {
 		}
 		return instance;
 	}
-
-	public Client getClient() {
-		return client;
+	
+	public void sendMessAll(String str) {
+		for (Client c : clients) {
+			c.sendMessage(str);
+		}
 	}
-
-	public void setClient(Client client) {
-		this.client = client;
+	
+	public void setMessage(Message mess) {
+		frame.addMessage(mess);
 	}
+	
 
-	public FrameChat getFrame() {
+
+
+	public JFrame getFrame() {
 		return frame;
 	}
 
-	public void setFrame(FrameChat frame) {
+	public void setFrame(Frame frame) {
 		this.frame = frame;
 	}
 
@@ -46,6 +59,19 @@ public class ControllerChat {
 
 	public void setServe(Server serve) {
 		this.serve = serve;
+	}
+	
+	public void addClient(Client c) {
+		clients.add(c);
+		frame.addUser(c.getUser());
+	}
+
+	public void setUser(User u) {
+		serve.setUser(u);	
+	}
+
+	public Client getLastClient() {
+		return clients.get(clients.size()-1);
 	}
 	
 	

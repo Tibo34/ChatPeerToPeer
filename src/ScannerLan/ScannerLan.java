@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Serveur.AdressNetWork;
+
 
 
 public class ScannerLan {
@@ -19,126 +21,25 @@ public class ScannerLan {
 	 public static String NOT_SET = "NOT_SET";
 	 private String ipLocal;
 	 private int localPort=6000;
+	 private ArrayList<AdressNetWork> ipAddrs;
+	 
+	 
 	 
 	 public ScannerLan() {
 		 ipLocal=getIP();
+		 ipAddrs=new ArrayList<AdressNetWork>();
 	 }
 
-	   public static boolean isEnabled(){
-	        try {
-	            String state;
-	            ProcessBuilder builder = new ProcessBuilder(
-	                    "cmd.exe", "/c", "netsh interface show interface \"Wi-Fi\"");
-	            builder.redirectErrorStream(true);
-	            Process p = builder.start();
-	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            String line;
-	            while ((line = r.readLine())!=null) {
-	                //line = r.readLine();
-	                if (line.contains("Administrative state")){
-	                    state = line.split("\\s+")[3];
-	                    //System.out.println(state);
-	                    state = state.toLowerCase();
-	                    if(state.equals("enabled")){
-	                        return true;
-	                    }else{
-	                        return false;
-	                    }
-	                }
-	            }
-	        } catch (IOException ex) {
-	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
-	        }
-	        return false;
-	    }
+	  
 	   
-	   public ArrayList<String> scanLocal() {
-		   ArrayList<String> ips=new ArrayList<String>();
-		   if(isConnected()) {
-			   ips=enumLocalNetwork();
-		   }
-		   return ips;
+	   public ArrayList<AdressNetWork> scanLocal() {
+		   ipAddrs=new ArrayList<AdressNetWork>();
+		   ipAddrs=enumLocalNetwork();		  
+		   return ipAddrs;
 	   }
+	    
 
-	   
-		
-		public static boolean isConnected(){
-	        try {
-	            String state;
-	            ProcessBuilder builder = new ProcessBuilder(
-	                    "cmd.exe", "/c", "netsh interface show interface \"Wi-Fi\"");
-	            builder.redirectErrorStream(true);
-	            Process p = builder.start();
-	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            String line;
-	            while ((line = r.readLine())!=null) {
-	                if (line.contains("connexion")){
-	                    state = line.split("\\s+")[4];
-	                    state = state.toLowerCase().trim();
-	                    if(state.contains("connect")){
-	                        return true;
-	                    }else{
-	                        return false;
-	                    }
-	                }
-	            }
-	        } catch (IOException ex) {
-	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
-	        }
-	        return false;
-	    }
-
-	    public static String getConnectedSSID(){
-	        String ssid = NOT_SET;
-	        try {
-	            ProcessBuilder builder = new ProcessBuilder(
-	                    "cmd.exe", "/c", "netsh wlan show interfaces");
-	            builder.redirectErrorStream(true);
-	            Process p = builder.start();
-	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            String line;
-	            while ((line = r.readLine())!=null) {
-	                //line = r.readLine();
-	                if (line.contains("SSID")){
-	                    ssid = line.split("\\s+")[3];
-//	                    System.out.println(ssid);
-	                    return ssid;
-	                }
-	            }
-	        } catch (IOException ex) {
-	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
-	        }
-	        return ssid;
-	    }
-
-	    public static String[] getListOfSSIDs(){
-	        String [] ssid_List;
-	        String ssid;
-	        ArrayList<String> arr = new ArrayList<>();
-	        try {
-	            ProcessBuilder builder = new ProcessBuilder(
-	                    "cmd.exe", "/c", "netsh wlan show networks");
-	            builder.redirectErrorStream(true);
-	            Process p = builder.start();
-	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            String line;
-	            while ((line = r.readLine())!=null) {
-	                //line = r.readLine();
-	                if (line.contains("SSID")){
-	                    ssid = line.split("\\s+")[3];
-	                    //System.out.println(ssid);
-	                    arr.add(ssid);
-	                }
-	            }
-	        } catch (IOException ex) {
-	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
-	        }
-	        ssid_List = new String[arr.size()];
-	        arr.toArray(ssid_List);
-	        return ssid_List;
-	    }
-
-	    public static String getIP(){
+	    public String getIP(){
 	        String ip = NOT_SET; 
 	        try {
 	            ProcessBuilder builder = new ProcessBuilder(
@@ -147,10 +48,9 @@ public class ScannerLan {
 	            Process p = builder.start();
 	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
 	            String line;
-	            while ((line = r.readLine())!=null) {	            
+	            while ((line = r.readLine())!=null&&ip.equals("NOT_SET")) {	            
 	                if (line.contains("Adresse IP")){	                	
-	                    ip = line.split("\\s+")[3];
-	                    return ip;
+	                    ip = line.split("\\s+")[3];	                   
 	                }
 	            }
 	        } catch (IOException ex) {
@@ -159,96 +59,37 @@ public class ScannerLan {
 	        return ip;
 	    }
 
-	    public static String getSubnetMask(){
-	        String sb = NOT_SET; 
-	        try {
-	            ProcessBuilder builder = new ProcessBuilder(
-	                    "cmd.exe", "/c", "netsh interface ip show addresses \"Wi-Fi\"");
-	            builder.redirectErrorStream(true);
-	            Process p = builder.start();
-	            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            String line;
-	            while ((line = r.readLine())!=null) {
-	                if (line.contains("Pr‚fixe")){
-	                    sb = line.split("\\s+")[6];
-	                    sb = sb.substring(0, sb.length() - 1);
-	                    return sb;
-	                }
-	            }
-	        } catch (IOException ex) {
-	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
-	        }
-	        return sb;
-	    }
-
-	    public static String getBroadcast(){
-	        String subnetMask = getSubnetMask();
-	        String ip = getIP();
-
-	        String []arrSubnetMask = subnetMask.split("\\.");
-	        String []arrIP = ip.split("\\.");
-	        int []networkAddress = new int[4];
-	        int [] broadcastAddress = new int[4];
-
-	        String broadcast = "";
-
-	        for(int i=0; i< 4; i++){
-	            networkAddress[i] =  Integer.parseInt(arrIP[i]) & Integer.parseInt(arrSubnetMask[i]);
-	            
-	        }
-
-	        for(int i=0; i< 4; i++){
-	            //broadcastAddress[i] =  networkAddress[i] | (~Integer.parseInt(arrSubnetMask[i]) & 0xff);
-	            //System.out.println(broadcastAddress[i]);
-	            broadcast = broadcast + "." + (networkAddress[i] | (~Integer.parseInt(arrSubnetMask[i]) & 0xff));
-	        }
-
-//	        System.out.println(broadcast.substring(1));
-
-	        //mask AND ip you get network address
-	        //Invert Mask OR Network Address you get broadcast
-
-	        return broadcast.substring(1);
-	    }
-	    
+	 
+	  
 	    /**
 	     * Parcourir l'ensemble du réseau pour détecter les postes de travail ou les
 	     * serveurs
 	     *
 	     * @param iproot plage de départ du scan
 	     */
-	    public ArrayList<String> enumLocalNetwork() {
+	    public ArrayList<AdressNetWork> enumLocalNetwork() {
 	        //Test base Ip valide
 	        String[] nip = ipLocal.split("\\.");
-	        ArrayList<String> ipConnected=new ArrayList<String>();
+	        ArrayList<AdressNetWork> ipConnected=new ArrayList<AdressNetWork>();
 	       
 	        if (nip.length != 4) {
 	            System.out.println("Base Ip incorrecte !!! exemple 192.168.2.0");
 	            return ipConnected;
-	        }
-	 
-	        //timer
-	       // int ifound = 0;
-	        //Long timestart = System.currentTimeMillis();
-	 
-	        //Entete du tableau
-	        //System.out.printf("%-16s %-30s %-10s \n", "Adresse ip", "Nom du poste", "Port ouvert");
+	        }	 
+	       
+	       
 	        byte[] ip = {(byte) Integer.parseInt(nip[0]), (byte) Integer.parseInt(nip[1]),
 	            (byte) Integer.parseInt(nip[2]), (byte) 0};
 	        byte local=ip[3];
 	 
-	        //Boucle sur l'ensemble du masque réseau
-	        for (int i = 0; i < 255; i++) {
+	        //Boucle sur l'ensemble du masque réseau arret à 100 mettre 255 pour tout le reseau
+	        for (int i = 0; i < 50; i++) {
 	            ip[3] = (byte) i;
 	            if((byte)i!=local) {			            
 			       try {
-		                InetAddress addr = InetAddress.getByAddress(ip);	                
-		                if (isAlive(addr.getHostAddress())&&portIsOpen(addr.getHostAddress(), localPort, 1)) {
-		                	ipConnected.add(addr.getHostAddress());
-		                	System.out.println(addr.getHostAddress()+" connecté!");
-		                   // System.out.printf("%-16s %-30s %-10s \n", addr.getHostAddress(),
-		                     //       addr.getHostName(), scanPort(addr.getHostAddress()));
-		                    //ifound++;
+		                InetAddress addr = InetAddress.getByAddress(ip);		                
+		                if (isAlive(addr.getHostAddress())) {
+		                	ipConnected.add(new AdressNetWork(addr));
 		                } 
 		            } catch (UnknownHostException e) {
 		                System.out.println(e.getMessage());
@@ -328,17 +169,41 @@ public class ScannerLan {
 	        }
 	    }
 	 
-	    /**
-	     * Exemple de scan sur la plage 192.168.2.0
-	     *
-	     * @param args
-	     * @throws IOException
-	     * @throws InterruptedException
-	     */
-	    public static void main(String[] args) throws IOException, InterruptedException {
-	       // LANScanner lan = new LANScanner();
-	        // lan.enumLocalNetwork("192.168.2.0");
-	    }
+	  
+
+		public String getIpLocal() {
+			return ipLocal;
+		}
+
+
+
+		public void setIpLocal(String ipLocal) {
+			this.ipLocal = ipLocal;
+		}
+
+
+
+		public int getLocalPort() {
+			return localPort;
+		}
+
+
+
+		public void setLocalPort(int localPort) {
+			this.localPort = localPort;
+		}
+
+
+
+		public ArrayList<AdressNetWork> getIpAddrs() {
+			return ipAddrs;
+		}
+
+
+
+		public void setIpAddrs(ArrayList<AdressNetWork> ipAddrs) {
+			this.ipAddrs = ipAddrs;
+		}
 	    
 	   
 }
