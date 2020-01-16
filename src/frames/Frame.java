@@ -117,8 +117,10 @@ public class Frame extends JFrame implements WindowListener {
 			JComboBox box=(JComboBox) e.getSource();		
 			AdressNetWork addr=(AdressNetWork) box.getSelectedItem();
 			serve.connection(addr);
-			inputUser.setEditable(true);
+			editable();
 			}
+
+		
 	   });
 			
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,6 +236,10 @@ public class Frame extends JFrame implements WindowListener {
 		users.remove(u);
 	}
 
+	
+	public void editable() {
+		inputUser.setEditable(true);
+	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {

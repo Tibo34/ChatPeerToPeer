@@ -78,6 +78,7 @@ public class Server implements Runnable {
 	
 	@Override
 	public void run() {		
+		System.out.println("Serveur lancé");
 		boolean serverOpen=true;		
 		while(serverOpen) {
 			  waitForConnection(); 
@@ -103,11 +104,10 @@ public class Server implements Runnable {
 	    try {
 	        connection = server.accept();
 	        if(lastClient==null) {
-	        	lastClient=new Client(connection);
-	        	
+	        	lastClient=new Client(connection);	        	
 	        }else {
-	        	lastClient.setReceve(connection);
-	 	        lastClient.ConnectionRetour();
+	        	System.out.println("client retour");	        	
+	 	        lastClient.initConnectionReceve(connection);
 	        }	     
 	       
 	    } catch (IOException ioexception) {

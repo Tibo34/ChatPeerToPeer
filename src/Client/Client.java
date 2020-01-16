@@ -29,8 +29,7 @@ public class Client{
 		  receve=s;		
 		  System.out.println("Client connecté");
 		  ConnectionRetour();
-		  createReceverClient();
-		 
+		  createReceverClient();		 
 	   }
 	   
 	public Client() {}	  
@@ -40,10 +39,8 @@ public class Client{
 		ConnectionInitSender(addr);
 	}
 
-	public void ConnectionRetour() {		 
-		  SocketAddress adress=receve.getRemoteSocketAddress();
+	public void ConnectionRetour() {			
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
-		  
 		  send=Utility.getFreePort(receve.getLocalPort()+1,addr);		
 		  ConnectionSender();
 		  echangeUser();			  
@@ -67,7 +64,8 @@ public class Client{
 		System.out.println("user : "+str);
 		User user=new User(str);
 		userConnect=user;
-		ControllerChat.getController().getFrame().addUser(user);		
+		ControllerChat.getController().getFrame().addUser(user);
+		ControllerChat.getController().getFrame().editable();
 	}
 	
 	
