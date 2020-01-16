@@ -21,7 +21,7 @@ public class ControllerChat {
 	
 	
 	private ControllerChat() {
-			
+			clients=new ArrayList<Client>();
 		
 	}
 	
