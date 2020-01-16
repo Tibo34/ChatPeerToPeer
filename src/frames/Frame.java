@@ -80,8 +80,7 @@ public class Frame extends JFrame implements WindowListener {
 	
 	 public void addUser(User u) {		  
 		   users.add(u);
-		   userListModel.addElement(u);				 
-		   serve.setUser(u);
+		   userListModel.addElement(u);		
 		   if(usersJList!=null) {
 			   usersJList.setVisibleRowCount(20);
 			   splitCenter.setLeftComponent(usersJList);
