@@ -78,14 +78,16 @@ public class Frame extends JFrame implements WindowListener {
 	}
 	
 	
-	 public void addUser(User u) {		  
+	 public void addUser(User u) {	
+		 if(!users.contains(u)) {
 		   users.add(u);
 		   userListModel.addElement(u);		
 		   if(usersJList!=null) {
 			   usersJList.setVisibleRowCount(20);
-			   splitCenter.setLeftComponent(usersJList);
-		   }
+			
+		 }
 	   }
+	 }
 	 
 	// update the chat window (GUI)
 	public void showMessage(final String text){

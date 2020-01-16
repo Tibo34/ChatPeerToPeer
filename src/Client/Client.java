@@ -77,16 +77,11 @@ public class Client{
 	public void ConnectionInitSender(AdressNetWork addr) {
 		try {
 			System.out.println(addr.getAdress().getHostAddress());
-			send=new Socket(addr.getAdress().getHostAddress(),6000);
-			if(send.isConnected()) {
-				System.out.println("connecté");				
-			}
+			send=new Socket(addr.getAdress().getHostAddress(),6000);			
 			ConnectionSender();						
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+		} catch (UnknownHostException e) {			
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 	}
@@ -112,6 +107,7 @@ public class Client{
 
 		public void setUser(User user) {
 			this.user = user;
+			sender.setUser(user);
 		}
 
 		public Socket getSend() {

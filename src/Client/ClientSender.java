@@ -12,14 +12,15 @@ public class ClientSender implements Runnable{
 	private ObjectOutputStream output; // stream data out
 	private User user;
 	
-	public ClientSender(Socket socket) {
-		socketSend=socket;
+	public ClientSender(Socket socket) {		
+		socketSend=socket;		
 		try {
 			setupStreams();
+			sendMessage(" user: "+user+", connecté");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		sendMessage(" user: "+user+", connecté");
+		
 	}
 	
 	private void setupStreams() throws IOException{

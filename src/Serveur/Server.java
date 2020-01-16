@@ -39,6 +39,7 @@ public class Server implements Runnable {
 	
 	private Server() {
 		server=Utility.getServerSocketPortFree(6000);
+		waitForConnection();
 		ControllerChat.getController().setServe(this);
 		scanNetWork=new ScannerLan();
 		ipLocal=scanNetWork.getIP();
@@ -90,7 +91,9 @@ public class Server implements Runnable {
 	}
 	
 	public void connection(AdressNetWork addr) {		
-		lastClient=new Client(addr);		
+		lastClient=new Client(addr);
+		System.out.println(user);
+		lastClient.setUser(user);
 		controller.addClient(lastClient);
 	}
 	
@@ -109,12 +112,6 @@ public class Server implements Runnable {
 	        System.out.println(lastClient.getUser());
 	        lastClient.setReceve(connection);
 	        lastClient.ConnectionRetour();
-	       /* if(last.getReceve()==null) {
-	        	Client client=new Client(connection);   	       
-	        	controller.addClient(client);
-	        }else {
-	        	last.setSend(connection);
-	        }*/
 	       
 	    } catch (IOException ioexception) {
 	        ioexception.printStackTrace();
