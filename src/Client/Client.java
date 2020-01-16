@@ -24,10 +24,11 @@ public class Client{
 	 * @param s Socket
 	 */
 	public Client(Socket s) {
-		   receve=s;		
+		  receve=s;		
 		  System.out.println("Client connecté");
-		  ConnectionSender();
 		  ConnectionRetour();
+		  createReceverClient();
+		 
 	   }
 	   
 	public Client() {}	  
@@ -38,9 +39,9 @@ public class Client{
 	}
 
 	public void ConnectionRetour() {		 
-		  SocketAddress adress=send.getRemoteSocketAddress();
-		  receve=Utility.getFreePort(send.getLocalPort()+1,adress);		
-		  createReceverClient();
+		  SocketAddress adress=receve.getRemoteSocketAddress();
+		  send=Utility.getFreePort(receve.getLocalPort()+1,adress);		
+		  ConnectionSender();
 		  echangeUser();			  
 	}
 
