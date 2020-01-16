@@ -27,8 +27,9 @@ public class Utility {
 	public static Socket getFreePort(int port,SocketAddress adress) {
 		Socket socket=null;
 		boolean portOk=true;
+		System.out.println(adress.toString());
 		for(int p=port ; p <= 65535&&portOk; p++){
-	         try {
+	         try {	        	 
 	        	 socket= new Socket(adress.toString(),p);	 
 	        	 portOk=false;	    
 	        	 System.out.println("port : "+p);
