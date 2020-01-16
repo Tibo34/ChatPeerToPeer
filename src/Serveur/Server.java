@@ -93,8 +93,7 @@ public class Server implements Runnable {
 	}
 	
 	public void connection(AdressNetWork addr) {		
-		lastClient=new Client(addr);
-		System.out.println(user);
+		lastClient=new Client(addr);		
 		lastClient.setUser(user);
 		controller.addClient(lastClient);
 	}
@@ -109,11 +108,7 @@ public class Server implements Runnable {
 	        }else {
 	        	lastClient.setReceve(connection);
 	 	        lastClient.ConnectionRetour();
-	        }
-	        System.out.println("connection");	      
-	        System.out.println(lastClient.getUser());
-	        lastClient.setReceve(connection);
-	        lastClient.ConnectionRetour();
+	        }	     
 	       
 	    } catch (IOException ioexception) {
 	        ioexception.printStackTrace();
