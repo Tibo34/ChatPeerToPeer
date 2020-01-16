@@ -42,8 +42,8 @@ public class Server implements Runnable {
 		scanNetWork=new ScannerLan();
 		ipLocal=scanNetWork.getIP();
 		scanNetWork();
-		loadUser();
-		frame=new Frame(server,ipsConnect,user);		
+		loadUser();		
+		frame=new Frame(this,ipsConnect,user);		
 		controller=ControllerChat.getController();
 		controller.setFrame(frame);
 		controller.setServe(this);
@@ -82,13 +82,13 @@ public class Server implements Runnable {
 	
 	
 	public static Server createServer() {
-		if(instance==null) {
+		if(instance==null) {			
 			instance=new Server();
 		}
 		return instance;
 	}
 	
-	public void connection(AdressNetWork addr) {
+	public void connection(AdressNetWork addr) {		
 		Client client=new Client();
 		client.ConnectionInitRecever(addr);
 		controller.addClient(client);
@@ -98,7 +98,9 @@ public class Server implements Runnable {
 	private void waitForConnection(){	 
 	    try {
 	        connection = server.accept();
+	        System.out.println("connection");
 	        Client last=ControllerChat.getController().getLastClient();
+	        System.out.println(last.getUser());
 	        if(last.getSend()==null) {
 	        	Client client=new Client(connection);   	       
 	        	controller.addClient(client);

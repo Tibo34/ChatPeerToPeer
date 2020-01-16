@@ -69,6 +69,7 @@ public class ScannerLan {
 	     */
 	    public ArrayList<AdressNetWork> enumLocalNetwork() {
 	        //Test base Ip valide
+	    	System.out.println("Début scan réseau!");
 	        String[] nip = ipLocal.split("\\.");
 	        ArrayList<AdressNetWork> ipConnected=new ArrayList<AdressNetWork>();
 	       
@@ -83,7 +84,7 @@ public class ScannerLan {
 	        byte local=ip[3];
 	 
 	        //Boucle sur l'ensemble du masque réseau arret à 100 mettre 255 pour tout le reseau
-	        for (int i = 0; i < 50; i++) {
+	        for (int i = 0; i < 25; i++) {
 	            ip[3] = (byte) i;
 	            if((byte)i!=local) {			            
 			       try {

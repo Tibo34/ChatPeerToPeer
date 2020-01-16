@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ import Serveur.AdressNetWork;
 import Serveur.Server;
 import javax.swing.JButton;
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements WindowListener {
 
 	private JPanel contentPane;
 	private JTextField inputUser;
@@ -50,31 +53,39 @@ public class Frame extends JFrame {
  	private JComboBox<AdressNetWork> boxAdress;
  	private JList<Message> userMessageJList;
  	private DefaultListModel<Message> messageListModel;
- 	private ServerSocket serve;
+ 	private Server serve;
  	private User userLocal;
-
+ 	private JSplitPane splitCenter;
+ 	private JSplitPane splitNorth;
+ 	private JPanel panelSouth;
 
 	/**
 	 * Create the frame.
 	 * @param user 
 	 */
-	public Frame(ServerSocket server,ArrayList<AdressNetWork> ips, User user) {
+	public Frame(Server server,ArrayList<AdressNetWork> ips, User user) {
  		serve=server;
 		ipsConnect=ips;
-		portLocal=server.getLocalPort();
+		portLocal=server.getServer().getLocalPort();
 		users=new ArrayList<User>();		
 		listusers=new LabelListUser();
 		userListModel=new DefaultListModel<User>();
-		userLocal=user;
-		System.out.println(user);
-		addUser(userLocal);		
+		if(user!=null) {
+			userLocal=user;		
+			addUser(userLocal);	
+		}			
 		initFrameComponent();		
 	}
 	
 	
 	 public void addUser(User u) {		  
 		   users.add(u);
-		   userListModel.addElement(u);		   
+		   userListModel.addElement(u);				 
+		   serve.setUser(u);
+		   if(usersJList!=null) {
+			   usersJList.setVisibleRowCount(20);
+			   splitCenter.setLeftComponent(usersJList);
+		   }
 	   }
 	 
 	// update the chat window (GUI)
@@ -104,9 +115,10 @@ public class Frame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox box=(JComboBox) e.getSource();		
 			AdressNetWork addr=(AdressNetWork) box.getSelectedItem();
-			Server.createServer().connection(addr);
-		}
-	});
+			serve.connection(addr);
+			inputUser.setEditable(true);
+			}
+	   });
 			
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 569, 377);
@@ -132,13 +144,10 @@ public class Frame extends JFrame {
 		JMenuItem menuItemUser = new JMenuItem("Créer User");
 		menuItemUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String userName=PopUp.popUpInput("Saisir un nom : ");
-				User user=new User(userName);				
-				removeUser(userLocal);
-				userLocal=user;		
-				addUser(userLocal);
+				User user = createUser();
 				ControllerChat.getController().setUser(user);	
 			}
+			
 		});
 		mnNewMenu_1.add(menuItemUser);
 		
@@ -150,9 +159,9 @@ public class Frame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2, BorderLayout.SOUTH);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		panelSouth = new JPanel();
+		contentPane.add(panelSouth, BorderLayout.SOUTH);
+		panelSouth.setLayout(new BorderLayout(0, 0));
 		
 		inputUser = new JTextField();
 		inputUser.addActionListener(new ActionListener() {
@@ -165,26 +174,26 @@ public class Frame extends JFrame {
 			}
 		});
 		inputUser.setEditable(false);
-		panel_2.add(inputUser);
+		panelSouth.add(inputUser);
 		inputUser.setColumns(10);
 		
-		JSplitPane splitPane = new JSplitPane();
-		contentPane.add(splitPane, BorderLayout.NORTH);
+		splitNorth = new JSplitPane();
+		contentPane.add(splitNorth, BorderLayout.NORTH);
 		
 		infoReseau = new JTextPane();
-		infoReseau.setText("connecté sur le port :"+portLocal);
+		infoReseau.setText(" port :"+portLocal);
 		
-		splitPane.setLeftComponent(infoReseau);
+		splitNorth.setLeftComponent(infoReseau);
 		
 			
-		splitPane.setRightComponent(boxAdress);
+		splitNorth.setRightComponent(boxAdress);
 		
-		JSplitPane splitPane_1 = new JSplitPane();
-		contentPane.add(splitPane_1, BorderLayout.CENTER);
+		splitCenter = new JSplitPane();
+		contentPane.add(splitCenter, BorderLayout.CENTER);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setEnabled(false);
-		splitPane_1.setRightComponent(scrollPane);
+		splitCenter.setRightComponent(scrollPane);
 		messageListModel=new DefaultListModel<Message>();
 		userMessageJList = new JList<Message>(messageListModel);
 		scrollPane.setViewportView(userMessageJList);
@@ -192,8 +201,20 @@ public class Frame extends JFrame {
 		
 		usersJList.setVisibleRowCount(20);
 		
-		splitPane_1.setLeftComponent(usersJList);
+		splitCenter.setLeftComponent(usersJList);
 		setVisible(true);
+	}
+	
+	private User createUser() {
+		String userName=PopUp.popUpInput("Saisir un nom : ");
+		User user=new User(userName);	
+		if(userLocal!=null) {
+			removeUser(userLocal);
+		}
+		userLocal=user;		
+		addUser(userLocal);
+		serve.setUser(user);
+		return user;
 	}
 	
 	public void setIpsLocal(ArrayList<AdressNetWork> ips) {
@@ -207,9 +228,63 @@ public class Frame extends JFrame {
 	
 	
 	public void removeUser(User u) {
-		int index=userListModel.indexOf(u);
+		int index=userListModel.indexOf(u);		
 		userListModel.remove(index);
 		users.remove(u);
+	}
+
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		try {
+			serve.getServer().close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

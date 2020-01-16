@@ -17,7 +17,7 @@ public class ClientRecever implements Runnable {
 		socketRecever=socket;
 		try {
 			setupStreams();
-			getUser();
+			//getUser();
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -30,14 +30,14 @@ public class ClientRecever implements Runnable {
 	private void getUser() {
 		try {
 			message=(String)input.readObject();
-			System.out.println(message);
+			System.out.println(message);			
 			if(message.contains("user")) {
 				String name=message.split(",")[0].split(":")[1];
 				name.trim();
 				userConnect=new User(name);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.err.println("erreur reseau");
 		}
 	}
 	
@@ -64,9 +64,21 @@ public class ClientRecever implements Runnable {
 			}
 		}		
 	}
+	
+	public String getMessage() {
+		try {
+			message=(String)input.readObject();
+			System.out.println(message);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return message;
+	}
 
 	private void receveMessage() throws IOException, ClassNotFoundException {
 		message=(String)input.readObject();
+		System.out.println(message);
 		Message mess=new Message(userConnect, message);
 		ControllerChat.getController().setMessage(mess);
 	}
@@ -77,7 +89,6 @@ public class ClientRecever implements Runnable {
 		try {
 			socketRecever.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

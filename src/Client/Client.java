@@ -21,8 +21,8 @@ public class Client{
 	   
 	   public Client(Socket s) {
 		  send=s;		
-		  ConnectionRetour();
-		
+		  System.out.println("Client connecté");
+		  ConnectionRetour();		
 	   }
 	   
 	   public Client() {}
@@ -36,10 +36,22 @@ public class Client{
 		  receve=Utility.getFreePort(send.getLocalPort(),adress);		
 		  recever=new ClientRecever(receve);
 		  clientRecever=new Thread(recever);
+		  echangeUser();
 		  clientSender.start();
 		  clientRecever.start();
+		  
 	}
 	
+	private void echangeUser() {
+		System.out.println("echange user");
+		sender.sendMessage("user:"+userConnect);
+		String str=recever.getMessage().split(":")[1];
+		System.out.println("user : "+str);
+		User user=new User(str);
+		ControllerChat.getController().getFrame().addUser(user);;
+		
+	}
+
 	public void ConnectionSender() {
 		  sender=new ClientSender(send);
 		  sender.setUser(user);
@@ -49,6 +61,7 @@ public class Client{
 	
 	public void ConnectionInitRecever(AdressNetWork addr) {
 		try {
+			System.out.println(addr.getAdress().getHostAddress());
 			receve=new Socket(addr.getAdress().getHostAddress(),6000);
 			recever=new ClientRecever(receve);
 			clientRecever=new Thread(recever);

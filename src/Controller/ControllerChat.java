@@ -45,7 +45,7 @@ public class ControllerChat {
 
 
 
-	public JFrame getFrame() {
+	public Frame getFrame() {
 		return frame;
 	}
 

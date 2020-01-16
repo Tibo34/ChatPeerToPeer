@@ -15,6 +15,7 @@ public class Utility {
 	         try {
 	        	 socket= new ServerSocket(p);	 
 	        	 portOk=false;
+	        	 System.out.println("port : "+p+" libre.");
 	         } catch (IOException e) {
 	            System.err.println("Le port " + p + " est déjà utilisé ! ");
 	         }
@@ -29,7 +30,8 @@ public class Utility {
 		for(int p=port ; p <= 65535&&portOk; p++){
 	         try {
 	        	 socket= new Socket(adress.toString(),p);	 
-	        	 portOk=false;	        	 
+	        	 portOk=false;	    
+	        	 System.out.println("port : "+p);
 	       } catch (IOException e) {
 	            System.err.println("Le port " + p + " est déjà utilisé ! ");
 	         }
