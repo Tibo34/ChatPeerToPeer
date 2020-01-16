@@ -1,5 +1,6 @@
 package Utile;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -24,13 +25,13 @@ public class Utility {
 	}
 	
 	
-	public static Socket getFreePort(int port,SocketAddress adress) {
+	public static Socket getFreePort(int port,InetAddress addr) {
 		Socket socket=null;
 		boolean portOk=true;
-		System.out.println(adress.toString());
+		System.out.println(addr);
 		for(int p=port ; p <= 65535&&portOk; p++){
 	         try {	        	 
-	        	 socket= new Socket(adress.toString(),p);	 
+	        	 socket= new Socket(addr,p);	 
 	        	 portOk=false;	    
 	        	 System.out.println("port : "+p);
 	       } catch (IOException e) {

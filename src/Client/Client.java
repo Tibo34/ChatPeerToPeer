@@ -1,5 +1,7 @@
 package Client;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
@@ -40,7 +42,9 @@ public class Client{
 
 	public void ConnectionRetour() {		 
 		  SocketAddress adress=receve.getRemoteSocketAddress();
-		  send=Utility.getFreePort(receve.getLocalPort()+1,adress);		
+		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
+		  
+		  send=Utility.getFreePort(receve.getLocalPort()+1,addr);		
 		  ConnectionSender();
 		  echangeUser();			  
 	}
