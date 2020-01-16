@@ -19,27 +19,40 @@ public class Client{
 	   private Thread clientSender;
 	   private User userConnect;
 	   
-	   public Client(Socket s) {
-		  send=s;		
+   /**
+    * génère un client avec une socket
+	 * @param s Socket
+	 */
+	public Client(Socket s) {
+		   receve=s;		
 		  System.out.println("Client connecté");
-		  ConnectionRetour();		
+		  ConnectionSender();
+		  ConnectionRetour();
 	   }
 	   
-	   public Client() {}
-	   
-	  
+	public Client() {}	  
 
 
-	private void ConnectionRetour() {
-		  ConnectionSender();
+	public Client(AdressNetWork addr) {
+		ConnectionInitSender(addr);
+	}
+
+	public void ConnectionRetour() {		 
 		  SocketAddress adress=send.getRemoteSocketAddress();
-		  receve=Utility.getFreePort(send.getLocalPort(),adress);		
+		  receve=Utility.getFreePort(send.getLocalPort()+1,adress);		
+		  createReceverClient();
+		  echangeUser();			  
+	}
+
+	private void createReceverClient() {
 		  recever=new ClientRecever(receve);
 		  clientRecever=new Thread(recever);
-		  echangeUser();
-		  clientSender.start();
 		  clientRecever.start();
-		  
+	}
+	
+	public void initConnectionReceve(Socket socket) {
+		receve=socket;
+		createReceverClient();
 	}
 	
 	private void echangeUser() {
@@ -48,24 +61,27 @@ public class Client{
 		String str=recever.getMessage().split(":")[1];
 		System.out.println("user : "+str);
 		User user=new User(str);
-		ControllerChat.getController().getFrame().addUser(user);;
-		
+		userConnect=user;
+		ControllerChat.getController().getFrame().addUser(user);		
 	}
+	
+	
 
 	public void ConnectionSender() {
-		  sender=new ClientSender(send);
-		  sender.setUser(user);
+		  sender=new ClientSender(send);		  
 		  clientSender=new Thread(sender);
+		  clientSender.start();
 	}
 	   
 	
-	public void ConnectionInitRecever(AdressNetWork addr) {
+	public void ConnectionInitSender(AdressNetWork addr) {
 		try {
 			System.out.println(addr.getAdress().getHostAddress());
-			receve=new Socket(addr.getAdress().getHostAddress(),6000);
-			recever=new ClientRecever(receve);
-			clientRecever=new Thread(recever);
-			clientRecever.start();			
+			send=new Socket(addr.getAdress().getHostAddress(),6000);
+			if(send.isConnected()) {
+				System.out.println("connecté");				
+			}
+			ConnectionSender();						
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,8 +119,7 @@ public class Client{
 		}
 
 		public void setSend(Socket send) {
-			this.send = send;
-			ConnectionSender();
+			this.send = send;			
 		}
 
 		public Socket getReceve() {
@@ -114,11 +129,6 @@ public class Client{
 		public void setReceve(Socket receve) {
 			this.receve = receve;
 		}
-
-
-
-		
-	   
 	  
 	
 

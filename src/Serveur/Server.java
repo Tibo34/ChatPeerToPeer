@@ -32,6 +32,7 @@ public class Server implements Runnable {
 	private ScannerLan scanNetWork;
 	private User user;
 	private ControllerChat controller;
+	private Client lastClient=null;
 	
 	private String fileName="userSave.properties";
 	
@@ -89,24 +90,31 @@ public class Server implements Runnable {
 	}
 	
 	public void connection(AdressNetWork addr) {		
-		Client client=new Client();
-		client.ConnectionInitRecever(addr);
-		controller.addClient(client);
+		lastClient=new Client(addr);		
+		controller.addClient(lastClient);
 	}
 	
 	//Wait for a connection then display connection information
 	private void waitForConnection(){	 
 	    try {
 	        connection = server.accept();
-	        System.out.println("connection");
-	        Client last=ControllerChat.getController().getLastClient();
-	        System.out.println(last.getUser());
-	        if(last.getSend()==null) {
+	        if(lastClient==null) {
+	        	lastClient=new Client(connection);
+	        	
+	        }else {
+	        	lastClient.setReceve(connection);
+	 	        lastClient.ConnectionRetour();
+	        }
+	        System.out.println("connection");	      
+	        System.out.println(lastClient.getUser());
+	        lastClient.setReceve(connection);
+	        lastClient.ConnectionRetour();
+	       /* if(last.getReceve()==null) {
 	        	Client client=new Client(connection);   	       
 	        	controller.addClient(client);
 	        }else {
 	        	last.setSend(connection);
-	        }
+	        }*/
 	       
 	    } catch (IOException ioexception) {
 	        ioexception.printStackTrace();
