@@ -33,13 +33,14 @@ public class Server implements Runnable {
 	private User user;
 	private ControllerChat controller;
 	private Client lastClient=null;
+	private Thread threadServer;
 	
 	private String fileName="userSave.properties";
 	
 	
 	private Server() {
-		server=Utility.getServerSocketPortFree(6000);
-		waitForConnection();
+		server=Utility.getServerSocketPortFree(6000);	
+		 threadServer = new Thread(this);
 		ControllerChat.getController().setServe(this);
 		scanNetWork=new ScannerLan();
 		ipLocal=scanNetWork.getIP();
@@ -49,6 +50,7 @@ public class Server implements Runnable {
 		controller=ControllerChat.getController();
 		controller.setFrame(frame);
 		controller.setServe(this);
+		threadServer.start();
 	}
 	
 	
@@ -76,7 +78,7 @@ public class Server implements Runnable {
 	
 	@Override
 	public void run() {		
-		boolean serverOpen=true;
+		boolean serverOpen=true;		
 		while(serverOpen) {
 			  waitForConnection(); 
 		}			
