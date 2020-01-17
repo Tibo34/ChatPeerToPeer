@@ -68,7 +68,10 @@ public class Client{
 	public void ConnectionInitSender(AdressNetWork addr) {
 		try {
 			System.out.println(addr.getAdress().getHostAddress());
-			send=new Socket(addr.getAdress().getHostAddress(),6000);			
+			ControllerChat.getController().getServe().restartServer(6001);
+			
+			send=new Socket(addr.getAdress().getHostAddress(),6000);
+			
 			ConnectionSender();						
 		} catch (UnknownHostException e) {			
 			e.printStackTrace();

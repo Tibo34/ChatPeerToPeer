@@ -38,8 +38,8 @@ public class Server implements Runnable {
 	private String fileName="userSave.properties";
 	
 	
-	private Server() {
-		server=Utility.getServerSocketPortFree(6000);	
+	private Server(int p) {
+		server=Utility.getServerSocketPortFree(p);	
 		 threadServer = new Thread(this);
 		ControllerChat.getController().setServe(this);
 		scanNetWork=new ScannerLan();
@@ -86,9 +86,9 @@ public class Server implements Runnable {
 	}
 	
 	
-	public static Server createServer() {
+	public static Server createServer(int p) {
 		if(instance==null) {			
-			instance=new Server();
+			instance=new Server(p);
 		}
 		return instance;
 	}
@@ -160,6 +160,23 @@ public class Server implements Runnable {
 			e.printStackTrace();
 		}
 				
+	}
+
+
+	public Thread getThreadServer() {
+		return threadServer;
+	}
+
+
+	public void setThreadServer(Thread threadServer) {
+		this.threadServer = threadServer;
+	}
+
+
+	public void restartServer(int p) {
+		threadServer.stop();
+		server=Utility.getServerSocketPortFree(p);
+		threadServer.start();
 	}
 	
 	

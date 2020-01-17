@@ -83,8 +83,7 @@ public class Frame extends JFrame implements WindowListener {
 		   users.add(u);
 		   userListModel.addElement(u);		
 		   if(usersJList!=null) {
-			   usersJList.setVisibleRowCount(20);
-			
+			   usersJList.setVisibleRowCount(20);			
 		 }
 	   }
 	 }
@@ -110,7 +109,6 @@ public class Frame extends JFrame implements WindowListener {
 			serve.connection(addr);
 			editable();
 			}
-
 		
 	   });
 			
@@ -283,6 +281,12 @@ public class Frame extends JFrame implements WindowListener {
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public void setPort(int p) {
+		portLocal=p;
+		infoReseau.setText(" port :"+portLocal);
 	}
 	
 
