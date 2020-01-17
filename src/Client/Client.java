@@ -41,7 +41,7 @@ public class Client{
 
 	public void ConnectionRetour() {			
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
-		  send=Utility.getFreePort(receve.getLocalPort()+1,addr);		
+		  send=Utility.getFreePort(receve.getLocalPort(),addr);		
 		  ConnectionSender();
 		  echangeUser();			  
 	}
@@ -59,7 +59,7 @@ public class Client{
 	
 	private void echangeUser() {
 		System.out.println("echange user");
-		sender.sendMessage("user:"+userConnect);
+		sender.sendMessage("user:"+user);
 		String str=recever.getMessage().split(":")[1];
 		System.out.println("user : "+str);
 		User user=new User(str);
