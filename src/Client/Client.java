@@ -76,6 +76,7 @@ public class Client{
 	}	
 
 	public void ConnectionSender() {
+			System.out.println(user);
 		  sender=new ClientSender(send,user,this);			 
 	}
 	   

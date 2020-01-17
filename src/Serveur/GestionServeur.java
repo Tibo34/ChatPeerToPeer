@@ -78,7 +78,7 @@ public class GestionServeur {
 			if(file.exists()) {
 		        FileInputStream in = new FileInputStream(file); 	  
 		        prop.load(in);	 
-		        String userName=prop.getProperty(USER2);
+		        String userName=prop.getProperty(USER2);		       
 		        if(!userName.isEmpty()) {
 		        	 user=new User(userName);		        	 
 		        }else {
@@ -135,6 +135,10 @@ public class GestionServeur {
 		lastServer.stop();
 		lastServer=new Server(this,user,lastServer.getServer().getLocalPort());		
 		
+	}
+
+	public User getUser() {
+		return user;
 	}
 	
 	
