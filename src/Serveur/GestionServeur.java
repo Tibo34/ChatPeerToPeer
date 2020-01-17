@@ -41,6 +41,7 @@ public class GestionServeur {
 		controller.setFrame(frame);
 		loadUser();
 		frame.setUserLocal(user);
+		frame.setGestion(this);
 	}
 	
 	public static GestionServeur getGestionServer() {		

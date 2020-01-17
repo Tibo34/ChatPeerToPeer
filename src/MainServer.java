@@ -1,10 +1,8 @@
 import Serveur.GestionServeur;
-import Serveur.Server;
 
 public class MainServer {
 	
-	public static void main(String[]args) {		
-		//Server serve=Server.createServer(6000);
+	public static void main(String[]args) {				
 		GestionServeur gestion=GestionServeur.getGestionServer();
 	}	
 

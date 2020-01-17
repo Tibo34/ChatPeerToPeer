@@ -61,13 +61,16 @@ public class Frame extends JFrame implements WindowListener {
 		}				
 	}
 	
-	public Frame(ArrayList<AdressNetWork> ips) {
-		gestion=GestionServeur.getGestionServer();
+	public Frame(ArrayList<AdressNetWork> ips) {		
 		ipsConnect=ips;		
 		users=new ArrayList<User>();		
 		listusers=new LabelListUser();
-		userListModel=new DefaultListModel<User>();
+		userListModel=new DefaultListModel<User>();				
 		initFrameComponent();	
+	}
+	
+	public void setGestion(GestionServeur g) {
+		gestion=g;
 	}
 	
 	

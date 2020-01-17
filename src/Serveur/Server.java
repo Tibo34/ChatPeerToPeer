@@ -1,26 +1,17 @@
 package Serveur;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Properties;
 
 import Client.Client;
 import Client.User;
 import Controller.ControllerChat;
 import ScannerLan.ScannerLan;
-import frames.Frame;
 
 
 
 public class Server implements Runnable {
 
-	private static final String USER2 = "user";
 	private ServerSocket server;
 	private Socket connection; // socket means set up connetion between 2 computers
 	private Thread thread;
