@@ -17,7 +17,7 @@ public class ClientRecever implements Runnable {
 		socketRecever=socket;
 		try {
 			setupStreams();
-			//getUser();
+			getUser();
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -35,6 +35,8 @@ public class ClientRecever implements Runnable {
 				String name=message.split(",")[0].split(":")[1];
 				name.trim();
 				userConnect=new User(name);
+				ControllerChat.getController().getFrame().addUser(userConnect);
+				ControllerChat.getController().getFrame().editable();
 			}
 		} catch (Exception e) {
 			System.err.println("erreur reseau");

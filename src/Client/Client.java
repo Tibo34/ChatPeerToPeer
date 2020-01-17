@@ -51,29 +51,17 @@ public class Client{
 		  recever=new ClientRecever(receve);
 		  clientRecever=new Thread(recever);
 		  clientRecever.start();
-		  echangeUser();
+		 
 	}
 	
 	public void initConnectionReceve(Socket socket) {
 		receve=socket;
 		createReceverClient();		
-	}
-	
-	private void echangeUser() {
-		System.out.println("echange user");
-		sender.sendMessage("user:"+user);
-		String str=recever.getMessage().split(":")[1];
-		System.out.println("user : "+str);
-		User user=new User(str);
-		userConnect=user;
-		ControllerChat.getController().getFrame().addUser(user);
-		ControllerChat.getController().getFrame().editable();
-	}
-	
-	
+	}	
 
 	public void ConnectionSender() {
-		  sender=new ClientSender(send);		  
+		  sender=new ClientSender(send);	
+		  sender.setUser(user);
 		  clientSender=new Thread(sender);
 		  clientSender.start();
 	}
