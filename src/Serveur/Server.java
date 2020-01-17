@@ -83,7 +83,7 @@ public class Server implements Runnable {
 	    try {	    	
 	        connection = server.accept();	
 	        lastClient=gestion.getLastClient();
-	        if(lastClient.getReceve().isClosed()) {
+	        if(lastClient.getReceve()==null) {
 	        	System.out.println("déjà un client");
 	        	lastClient.setReceve(connection);	        	
 	        }else {

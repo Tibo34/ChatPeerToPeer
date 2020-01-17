@@ -77,6 +77,7 @@ public class Frame extends JFrame implements WindowListener {
 	public void setUserLocal(User u) {
 		userLocal=u;		
 		addUser(userLocal);
+		usersJList.setVisibleRowCount(20);
 	}
 	
 	 public void addUser(User u) {	
