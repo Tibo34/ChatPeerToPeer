@@ -35,6 +35,7 @@ import Client.Message;
 import Client.User;
 import Controller.ControllerChat;
 import Serveur.AdressNetWork;
+import Serveur.GestionServeur;
 import Serveur.Server;
 import javax.swing.JButton;
 
@@ -52,21 +53,21 @@ public class Frame extends JFrame implements WindowListener {
  	private JTextPane infoReseau; 
  	private JComboBox<AdressNetWork> boxAdress;
  	private JList<Message> userMessageJList;
- 	private DefaultListModel<Message> messageListModel;
- 	private Server serve;
+ 	private DefaultListModel<Message> messageListModel; 
  	private User userLocal;
  	private JSplitPane splitCenter;
  	private JSplitPane splitNorth;
  	private JPanel panelSouth;
+ 	
+ 	private GestionServeur gestion;
 
 	/**
 	 * Create the frame.
 	 * @param user 
 	 */
-	public Frame(Server server,ArrayList<AdressNetWork> ips, User user) {
- 		serve=server;
-		ipsConnect=ips;
-		portLocal=server.getServer().getLocalPort();
+	public Frame(ArrayList<AdressNetWork> ips, User user) { 
+		gestion=GestionServeur.getGestionServer();
+		ipsConnect=ips;		
 		users=new ArrayList<User>();		
 		listusers=new LabelListUser();
 		userListModel=new DefaultListModel<User>();
@@ -76,6 +77,8 @@ public class Frame extends JFrame implements WindowListener {
 		}			
 		initFrameComponent();		
 	}
+	
+	
 	
 	
 	 public void addUser(User u) {	
@@ -106,7 +109,7 @@ public class Frame extends JFrame implements WindowListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox box=(JComboBox) e.getSource();		
 			AdressNetWork addr=(AdressNetWork) box.getSelectedItem();
-			serve.connection(addr);
+			gestion.connection(addr);
 			editable();
 			}
 		
@@ -136,10 +139,8 @@ public class Frame extends JFrame implements WindowListener {
 		JMenuItem menuItemUser = new JMenuItem("Créer User");
 		menuItemUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				User user = createUser();
-				ControllerChat.getController().setUser(user);	
-			}
-			
+				createUser();	
+			}			
 		});
 		mnNewMenu_1.add(menuItemUser);
 		
@@ -198,14 +199,12 @@ public class Frame extends JFrame implements WindowListener {
 	}
 	
 	private User createUser() {
-		String userName=PopUp.popUpInput("Saisir un nom : ");
-		User user=new User(userName);	
+		User user=gestion.createUser();
 		if(userLocal!=null) {
 			removeUser(userLocal);
 		}
 		userLocal=user;		
-		addUser(userLocal);
-		serve.setUser(user);
+		addUser(userLocal);	
 		return user;
 	}
 	
@@ -246,13 +245,7 @@ public class Frame extends JFrame implements WindowListener {
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		try {
-			serve.getServer().close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		GestionServeur.getGestionServer().closeAll();		
 	}
 
 

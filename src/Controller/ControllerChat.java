@@ -1,12 +1,8 @@
 package Controller;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 import Client.Client;
 import Client.Message;
-import Client.User;
-import Serveur.Server;
 import frames.Frame;
 
 
@@ -14,15 +10,12 @@ public class ControllerChat {
 	
 	
 	private ArrayList<Client> clients;
-	private Frame frame;
-	private Server serve;
-	
+	private Frame frame;	
 	private static ControllerChat instance;
 	
 	
 	private ControllerChat() {
-			clients=new ArrayList<Client>();
-		
+			clients=new ArrayList<Client>();		
 	}
 	
 	public static ControllerChat getController() {
@@ -40,9 +33,7 @@ public class ControllerChat {
 	
 	public void setMessage(Message mess) {
 		frame.addMessage(mess);
-	}
-	
-
+	}	
 
 
 	public Frame getFrame() {
@@ -53,29 +44,19 @@ public class ControllerChat {
 		this.frame = frame;
 	}
 
-	public Server getServe() {
-		return serve;
-	}
-
-	public void setServe(Server serve) {
-		this.serve = serve;
-	}
 	
 	public void addClient(Client c) {
 		clients.add(c);
 		frame.addUser(c.getUser());
 	}
-
-	public void setUser(User u) {
-		serve.setUser(u);	
-	}
-
+	
 	public Client getLastClient() {
 		return clients.get(clients.size()-1);
 	}
-	
-	
-	
+
+	public void removeClient(Client client) {
+		clients.remove(client);		
+	}
 	
 
 }

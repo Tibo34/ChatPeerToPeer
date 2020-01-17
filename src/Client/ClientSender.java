@@ -3,30 +3,29 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import Controller.ControllerChat;
-import frames.Frame;
-
-public class ClientSender implements Runnable{
+public class ClientSender{
 	
 	private Socket socketSend;
 	private ObjectOutputStream output; // stream data out
 	private User user;
+	private Client client;
 	
-	public ClientSender(Socket socket,User u) {		
+	public ClientSender(Socket socket,User u, Client c) {		
 		socketSend=socket;		
 		user=u;
-		try {
-			setupStreams();
-			sendMessage(" user: "+user+", connecté");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		client=c;
+		setupStreams();
+		sendMessage(" user: "+user+", connecté");		
 	}
 	
-	private void setupStreams() throws IOException{
-	    output = new ObjectOutputStream(socketSend.getOutputStream()); // set up pathway to send data out
-	    output.flush(); // move data away from your machine	   
+	private void setupStreams(){	    
+	    try {
+	    	output = new ObjectOutputStream(socketSend.getOutputStream()); 
+			output.flush();
+		} catch (IOException e) {			
+			e.printStackTrace();
+			close();
+		}
 	}
 	
 	// send message to the client
@@ -38,22 +37,18 @@ public class ClientSender implements Runnable{
 		        return true;
 		    }catch(IOException ioexception){
 		    	ioexception.printStackTrace();		    			    	
-		    	return false;
+		    	close();
 		    }
+		    return false;
 		}
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			
-		}
+	
 		
 		public void close() {
 			try {
 				socketSend.close();
-				System.out.println("socket close");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				client.connectionClose();
+				System.out.println("socket close");				
+			} catch (IOException e) {				
 				e.printStackTrace();
 			}
 		}

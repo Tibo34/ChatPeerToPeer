@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -119,37 +120,8 @@ public class ScannerLan {
 	            Logger.getLogger(ScannerLan.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	        return reachable;
-	    }
-	 
-	    /**
-	     * Exemple de plage de port à scanner
-	     *
-	     * @param ip adresse ip du poste
-	     * @return String
-	     */
-	    private String scanPort(String ip) {
-	        String openPort = "";
-	        int time=1;
-	 
-	        //Port de communication FTP
-	        if (portIsOpen(ip, 21, time)) {
-	            openPort += " FTP  21";
-	        }
-	        //Port standard pour le web, par ex Apache
-	        if (portIsOpen(ip, 80, time)) {
-	            openPort += " Http : 80";
-	        }
-	        //Port d'une imprimante
-	        if (portIsOpen(ip, 515, time)) {
-	            openPort += " Printer : 515";
-	        }
-	        //Port du serveur MySql
-	        if (portIsOpen(ip, 3306, time)) {
-	            openPort += " MySql : 3306";
-	        }
-	 
-	        return openPort.trim();
-	    }
+	    }	 
+	    
 	 
 	    /**
 	     * Tester l'état du port sur un poste
@@ -159,15 +131,16 @@ public class ScannerLan {
 	     * @param timeout délai en ms
 	     * @return port ouvert ou non
 	     */
-	    private boolean portIsOpen(String ip, int port, int timeout) {
+	    public boolean portIsOpen(String ip, int port, int timeout) {
 	        try {
 	            Socket socket = new Socket();
 	            socket.connect(new InetSocketAddress(ip, port), timeout);
 	            socket.close();
 	            return true;
 	        } catch (Exception ex) {
-	            return false;
+	          System.err.println("connection non trouvé");
 	        }
+	        return false;
 	    }
 	 
 	  
@@ -204,6 +177,48 @@ public class ScannerLan {
 
 		public void setIpAddrs(ArrayList<AdressNetWork> ipAddrs) {
 			this.ipAddrs = ipAddrs;
+		}
+
+
+
+		public static Socket getFreePort(int port,InetAddress addr) {
+			Socket socket=null;
+			boolean portOk=true;
+			System.out.println(addr);
+			for(int p=port ; p <= 65535&&portOk; p++){
+		         try {	        	 
+		        	 socket= new Socket(addr,p);	 
+		        	 portOk=false;	    
+		        	 System.out.println("port : "+p);
+		       } catch (IOException e) {
+		            System.err.println("Le port " + p + " est déjà utilisé ! ");
+		         }
+		     }		
+			return socket;
+		}
+
+
+
+		public static ServerSocket getServerSocketPortFree(int port) {		
+			ServerSocket socket=null;
+			boolean portOk=true;
+			for(int p=port ; p <= 65535&&portOk; p++){
+		         try {
+		        	 socket= new ServerSocket(p);	 
+		        	 portOk=false;
+		        	 System.out.println("port : "+p+" libre.");
+		         } catch (IOException e) {
+		            System.err.println("Le port " + p + " est déjà utilisé ! ");
+		         }
+		      }		
+			return socket;
+		}
+
+
+
+		public Socket connect(AdressNetWork addr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	    
 	   

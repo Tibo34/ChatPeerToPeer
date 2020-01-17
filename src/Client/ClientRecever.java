@@ -12,9 +12,11 @@ public class ClientRecever implements Runnable {
 	private ObjectInputStream input; // stream data in
 	private String message="";
 	private User userConnect;
+	private Client client;
 	
-	public ClientRecever(Socket socket) {
+	public ClientRecever(Socket socket, Client c) {
 		socketRecever=socket;
+		client=c;
 		try {
 			setupStreams();
 			getUser();
@@ -27,20 +29,15 @@ public class ClientRecever implements Runnable {
 	    input = new ObjectInputStream(socketRecever.getInputStream()); // set up pathway to allow data in
 	}
 	
-	private void getUser() {
-		try {
-			message=(String)input.readObject();
-						
-			if(message.contains("user")) {
-				String name=message.split(",")[0].split(":")[1];
-				name.trim();
-				userConnect=new User(name);				
-				ControllerChat.getController().getFrame().addUser(userConnect);
-				ControllerChat.getController().getFrame().editable();
-			}
-		} catch (Exception e) {
-			System.err.println("erreur reseau");
-		}
+	private void getUser() {		
+		readMessage();						
+		if(message.contains("user")) {
+			String name=message.split(",")[0].split(":")[1];
+			name.trim();
+			userConnect=new User(name);				
+			ControllerChat.getController().getFrame().addUser(userConnect);
+			ControllerChat.getController().getFrame().editable();
+		}		
 	}
 	
 
@@ -55,36 +52,32 @@ public class ClientRecever implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("recever ok");
-		while(socketRecever.isConnected()) {
-			try {
-				receveMessage();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		while(socketRecever.isConnected()) {			
+				receveMessage();			 
 		}		
 		System.out.println("socket close");
 	}
 	
-	public String getMessage() {
-		try {
-			message=(String)input.readObject();
-			System.out.println(message);
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+	public String getMessage() {		
+		readMessage();
+		System.out.println(message);			
 		return message;
 	}
 
-	private void receveMessage() throws IOException, ClassNotFoundException {
-		message=(String)input.readObject();
+	private void receveMessage() {
+		readMessage();
 		System.out.println(message);
 		Message mess=new Message(userConnect, message);
 		ControllerChat.getController().setMessage(mess);
+	}
+
+	private void readMessage(){
+		try {
+			message=(String)input.readObject();
+		} catch (ClassNotFoundException | IOException e) {			
+			e.printStackTrace();
+			close();
+		}
 	}
 	
 	
@@ -92,6 +85,8 @@ public class ClientRecever implements Runnable {
 	public void close() {
 		try {
 			socketRecever.close();
+			ControllerChat.getController().getFrame().removeUser(userConnect);
+			client.connectionClose();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

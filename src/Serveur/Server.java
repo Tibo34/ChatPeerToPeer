@@ -14,7 +14,6 @@ import Client.Client;
 import Client.User;
 import Controller.ControllerChat;
 import ScannerLan.ScannerLan;
-import Utile.Utility;
 import frames.Frame;
 
 
@@ -24,32 +23,41 @@ public class Server implements Runnable {
 	private static final String USER2 = "user";
 	private ServerSocket server;
 	private Socket connection; // socket means set up connetion between 2 computers
-	private static Server instance;
 	private Thread thread;
-	private Frame frame;
-	private ArrayList<AdressNetWork> ipsConnect;
-	private String ipLocal;
 	private ScannerLan scanNetWork;
 	private User user;
 	private ControllerChat controller;
 	private Client lastClient=null;
 	private Thread threadServer;
+	private GestionServeur gestion;		
+	private static int portStart=6000;
+	private boolean serverOpen;
+
 	
-	private String fileName="userSave.properties";
 	
 	
-	private Server(int p) {
-		server=Utility.getServerSocketPortFree(p);	
-		 threadServer = new Thread(this);
-		ControllerChat.getController().setServe(this);
-		scanNetWork=new ScannerLan();
-		ipLocal=scanNetWork.getIP();
-		scanNetWork();
-		loadUser();		
-		frame=new Frame(this,ipsConnect,user);		
+	
+	public Server(GestionServeur g,User u) {
+		this(g,u,portStart);		
+	}
+	
+	
+
+
+	public Server(GestionServeur g, User u, int localPort) {
+		user=u;
 		controller=ControllerChat.getController();
-		controller.setFrame(frame);
-		controller.setServe(this);
+		server=ScannerLan.getServerSocketPortFree(localPort);
+		gestion=g;
+		serverStart();
+	}
+	
+
+
+
+
+	private void serverStart() {
+		threadServer = new Thread(this);			
 		threadServer.start();
 	}
 	
@@ -59,7 +67,7 @@ public class Server implements Runnable {
 	}
 
 	public void scanNetWork() {
-		ipsConnect=scanNetWork.scanLocal();
+		scanNetWork.scanLocal();
 	}
 	
 	public void startServer() {
@@ -76,42 +84,31 @@ public class Server implements Runnable {
 		thread.stop();		
 	}
 	
+	public void connectionClose() {
+		gestion.restartLastServer();
+	}
+	
 	@Override
 	public void run() {		
 		System.out.println("Serveur lancé");
-		boolean serverOpen=true;		
-		while(serverOpen) {
-			  waitForConnection(); 
+		serverOpen=true;	
+		while(serverOpen) {				
+			waitForConnection(); 					 
 		}			
-	}
+	}	
 	
-	
-	public static Server createServer(int p) {
-		if(instance==null) {			
-			instance=new Server(p);
-		}
-		return instance;
-	}
-	
-	public void connection(AdressNetWork addr) {		
-		lastClient=new Client(addr,user);		
-		controller.addClient(lastClient);
-	}
-	
+
 	//Wait for a connection then display connection information
 	private void waitForConnection(){	 
-	    try {
-	        connection = server.accept();
-	        if(lastClient==null) {
-	        	lastClient=new Client(connection,user);	 	        	
-	        }else {
-	        	System.out.println("client retour");	        	
-	 	        lastClient.initConnectionReceve(connection);
-	        }	     
-	       
+	    try {	    	
+	        connection = server.accept();	
+	        lastClient=new Client(connection,user,this);
+	        controller.addClient(lastClient);
+	        gestion.createServer();	
+	        serverOpen=false;	       
 	    } catch (IOException ioexception) {
 	        ioexception.printStackTrace();
-	    }	 
+	    }	 	   
 	}
 
 	public ServerSocket getServer() {
@@ -128,39 +125,8 @@ public class Server implements Runnable {
 	}
 	
 	public void saveUser() {		
-		Properties prop=new Properties();
-		prop.setProperty(USER2, user.getName());
-		try {
-			File file=new File(fileName);
-			FileOutputStream f= new FileOutputStream(file);
-			prop.store(f, null);
-			f.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-
-	public void loadUser() {
-		Properties prop=new Properties();
-		try {			
-			File file=new File(fileName);
-			if(file.exists()) {
-		        FileInputStream in = new FileInputStream(file); 	  
-		        prop.load(in);	 
-		        String userName=prop.getProperty(USER2);
-		        if(!userName.isEmpty()) {
-		        	 setUser(new User(userName));
-		        }	    
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-				
-	}
+		gestion.saveUser();
+	}	
 
 
 	public Thread getThreadServer() {
@@ -171,9 +137,6 @@ public class Server implements Runnable {
 	public void setThreadServer(Thread threadServer) {
 		this.threadServer = threadServer;
 	}
-
-
-	
 	
 	
 
