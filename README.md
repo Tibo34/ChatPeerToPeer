@@ -15,3 +15,7 @@ Le champ texte du bas se dévérouille.
 Puis le chat est fonctionnel.
 Le texte saisie dans ce champ va être transmit à l'autre machine par la socket qui a demander la connection.
 L'autre socket se charge de réceptionner les messages.
+
+Pour lancer l'application : extraire le fichier userSave.properties dans le même répertoire que le jar.
+Puis lancer l'application avec: java -jar <nom du jar>
+
