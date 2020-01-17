@@ -30,12 +30,11 @@ public class ClientRecever implements Runnable {
 	private void getUser() {
 		try {
 			message=(String)input.readObject();
-			System.out.println(message);			
+						
 			if(message.contains("user")) {
 				String name=message.split(",")[0].split(":")[1];
 				name.trim();
-				userConnect=new User(name);
-				System.out.println(userConnect);
+				userConnect=new User(name);				
 				ControllerChat.getController().getFrame().addUser(userConnect);
 				ControllerChat.getController().getFrame().editable();
 			}

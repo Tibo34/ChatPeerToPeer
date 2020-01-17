@@ -32,12 +32,12 @@ public class ClientSender implements Runnable{
 	// send message to the client
 		public boolean sendMessage(String message){
 		    try{
+		    	System.out.println("message send  : "+message);
 		        output.writeObject(message);
 		        output.flush(); 
 		        return true;
 		    }catch(IOException ioexception){
-		    	ioexception.printStackTrace();
-		    	Frame frame=(Frame) ControllerChat.getController().getFrame();		    	
+		    	ioexception.printStackTrace();		    			    	
 		    	return false;
 		    }
 		}
