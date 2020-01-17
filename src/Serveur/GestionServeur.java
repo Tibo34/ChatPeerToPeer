@@ -99,12 +99,13 @@ public class GestionServeur {
 		        	FileInputStream in = new FileInputStream(file); 
 					prop.load(in);
 					String userName=prop.getProperty(USER2);
-					 maxIp=Integer.parseInt(prop.getProperty("maxIp"));					 
+					String max=prop.getProperty("maxIp");
+					maxIp=Integer.parseInt(max);					 
 					 if(!userName.isEmpty()) {
 			        	 user=new User(userName);	
 			        	 changeAlluserServers();
 			        }    
-				} catch (IOException e) {
+				} catch (IOException|NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}		       
