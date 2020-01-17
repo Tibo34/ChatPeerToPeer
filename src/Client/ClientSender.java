@@ -51,6 +51,7 @@ public class ClientSender implements Runnable{
 		public void close() {
 			try {
 				socketSend.close();
+				System.out.println("socket close");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

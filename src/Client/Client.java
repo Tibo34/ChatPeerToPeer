@@ -50,8 +50,7 @@ public class Client{
 	private void createReceverClient() {
 		  recever=new ClientRecever(receve);
 		  clientRecever=new Thread(recever);
-		  clientRecever.start();
-		 
+		  clientRecever.start();		 
 	}
 	
 	public void initConnectionReceve(Socket socket) {
