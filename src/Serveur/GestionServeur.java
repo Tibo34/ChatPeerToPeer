@@ -29,9 +29,10 @@ public class GestionServeur {
 	private String fileName="userSave.properties";
 	private static final String USER2 = "user";	
 
-	public GestionServeur() {
+	private GestionServeur() {
 		super();
 		this.servers = new ArrayList<Server>();
+		createServer();
 		scanNetWork=new ScannerLan();		
 		scanNetWork();				
 		frame=new Frame(ipsConnect,user);	
