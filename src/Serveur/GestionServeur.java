@@ -25,26 +25,25 @@ public class GestionServeur {
 	private ScannerLan scanNetWork;
 	private User user;
 	private ControllerChat controller;
-	private static GestionServeur instance=null;
+	private static GestionServeur instance=new GestionServeur();
 	private String fileName="userSave.properties";
 	private static final String USER2 = "user";	
 
 	private GestionServeur() {
 		super();
+		System.out.println("Gestion Serveur");
 		this.servers = new ArrayList<Server>();
 		createServer();
 		scanNetWork=new ScannerLan();		
 		scanNetWork();				
-		frame=new Frame(ipsConnect,user);	
-		loadUser();	
+		frame=new Frame(ipsConnect);		
 		controller=ControllerChat.getController();
 		controller.setFrame(frame);
+		loadUser();
+		frame.setUserLocal(user);
 	}
 	
-	public static GestionServeur getGestionServer() {
-		if(instance==null) {
-			instance=new GestionServeur();
-		}
+	public static GestionServeur getGestionServer() {		
 		return instance;
 	}
 	
@@ -80,7 +79,7 @@ public class GestionServeur {
 		        prop.load(in);	 
 		        String userName=prop.getProperty(USER2);
 		        if(!userName.isEmpty()) {
-		        	 setUser(new User(userName));
+		        	 user=new User(userName);		        	 
 		        }else {
 		        	createUser();
 				}	    
@@ -133,8 +132,7 @@ public class GestionServeur {
 
 	public void restartLastServer() {
 		lastServer.stop();
-		lastServer=new Server(this,user,lastServer.getServer().getLocalPort());
-		
+		lastServer=new Server(this,user,lastServer.getServer().getLocalPort());		
 		
 	}
 	

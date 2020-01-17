@@ -1,19 +1,12 @@
 package frames;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
@@ -27,17 +20,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import Client.Client;
 import Client.Message;
 import Client.User;
 import Controller.ControllerChat;
 import Serveur.AdressNetWork;
 import Serveur.GestionServeur;
-import Serveur.Server;
-import javax.swing.JButton;
 
 public class Frame extends JFrame implements WindowListener {
 
@@ -66,18 +55,26 @@ public class Frame extends JFrame implements WindowListener {
 	 * @param user 
 	 */
 	public Frame(ArrayList<AdressNetWork> ips, User user) { 
+		this(ips);
+		if(user!=null) {
+			setUserLocal(user);	
+		}				
+	}
+	
+	public Frame(ArrayList<AdressNetWork> ips) {
 		gestion=GestionServeur.getGestionServer();
 		ipsConnect=ips;		
 		users=new ArrayList<User>();		
 		listusers=new LabelListUser();
 		userListModel=new DefaultListModel<User>();
-		if(user!=null) {
-			userLocal=user;		
-			addUser(userLocal);	
-		}			
 		initFrameComponent();	
 	}
 	
+	
+	public void setUserLocal(User u) {
+		userLocal=u;		
+		addUser(userLocal);
+	}
 	
 	 public void addUser(User u) {	
 		 if(!users.contains(u)) {

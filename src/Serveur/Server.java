@@ -24,7 +24,6 @@ public class Server implements Runnable {
 	private ServerSocket server;
 	private Socket connection; // socket means set up connetion between 2 computers
 	private Thread thread;
-	private ScannerLan scanNetWork;
 	private User user;
 	private ControllerChat controller;
 	private Client lastClient=null;
@@ -66,10 +65,6 @@ public class Server implements Runnable {
 		return user;
 	}
 
-	public void scanNetWork() {
-		scanNetWork.scanLocal();
-	}
-	
 	public void startServer() {
 		thread=new Thread(this);
 		thread.start();	
@@ -90,7 +85,7 @@ public class Server implements Runnable {
 	
 	@Override
 	public void run() {		
-		System.out.println("Serveur lancï¿½");
+		System.out.println("Serveur lancé");
 		serverOpen=true;	
 		while(serverOpen) {				
 			waitForConnection(); 					 
