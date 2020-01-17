@@ -70,11 +70,11 @@ public class Frame extends JFrame implements WindowListener {
 		users=new ArrayList<User>();		
 		listusers=new LabelListUser();
 		userListModel=new DefaultListModel<User>();				
-		initFrameComponent();	
+		initFrameComponent();		
 	}
 	
 	public void setGestion(GestionServeur g) {
-		gestion=g;
+		gestion=g;		
 	}
 	
 	

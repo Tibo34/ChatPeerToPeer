@@ -23,10 +23,12 @@ public class ScannerLan {
 	 private String ipLocal;
 	 private int localPort=6000;
 	 private ArrayList<AdressNetWork> ipAddrs;
+	 private int maxScanIp;
 	 
 	 
 	 
-	 public ScannerLan() {
+	 public ScannerLan(int max) {
+		 maxScanIp=max;
 		 ipLocal=getIP();
 		 ipAddrs=new ArrayList<AdressNetWork>();
 	 }
@@ -85,7 +87,7 @@ public class ScannerLan {
 	        byte local=ip[3];
 	 
 	        //Boucle sur l'ensemble du masque réseau arret à 100 mettre 255 pour tout le reseau
-	        for (int i = 0; i < 25; i++) {
+	        for (int i = 0; i < maxScanIp; i++) {
 	            ip[3] = (byte) i;
 	            if((byte)i!=local) {			            
 			       try {

@@ -40,6 +40,9 @@ public class Server implements Runnable {
 
 
 
+	/**
+	 * Démarre les serveur et crée un thread
+	 */
 	private void serverStart() {
 		threadServer = new Thread(this);			
 		threadServer.start();
@@ -64,6 +67,9 @@ public class Server implements Runnable {
 		thread.stop();		
 	}
 	
+	/**
+	 * Redemarre la connection
+	 */
 	public void connectionClose() {
 		gestion.restartLastServer();
 	}
@@ -77,7 +83,10 @@ public class Server implements Runnable {
 	}	
 	
 
-	//Wait for a connection then display connection information
+	
+	/**
+	 * Attend qu'un utilisateur se connecte
+	 */
 	private void waitForConnection(){	 
 	    try {	    	
 	        connection = server.accept();	

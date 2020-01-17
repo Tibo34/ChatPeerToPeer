@@ -30,35 +30,49 @@ public class GestionServeur {
 	private ControllerChat controller;
 	private static GestionServeur instance=new GestionServeur();
 	private String fileName="userSave.properties";
+	private int maxIp =25;
 	private static final String USER2 = "user";	
 
 	private GestionServeur() {
 		super();	
 		this.servers = new ArrayList<Server>();
 		createServer();
-		scanNetWork=new ScannerLan();		
+		loadUser();
+		scanNetWork=new ScannerLan(maxIp);		
 		scanNetWork();				
 		frame=new Frame(ipsConnect);		
 		controller=ControllerChat.getController();
 		controller.setFrame(frame);
-		loadUser();
+		
 		frame.setUserLocal(user);
-		frame.setGestion(this);
+		frame.setGestion(this);		
 	}
 	
+	/**
+	 * Retourne une instance de GestionServeur
+	 * @return GestionServeur
+	 */
 	public static GestionServeur getGestionServer() {		
 		return instance;
 	}
 	
+	/**
+	 * Créer une nouvelle SocketServer
+	 * @return Server
+	 */
 	public Server createServer() {
 		lastServer=new Server(this,user);
 		servers.add(lastServer);
 		return lastServer;
 	}
 	
+	/**
+	 * Sauvegarde le profil utilisateur dans un fichier local
+	 */
 	public void saveUser() {		
 		Properties prop=new Properties();
 		prop.setProperty(USER2, user.getName());
+		prop.setProperty("maxIp",new Integer(maxIp).toString());
 		try {
 			File file=new File(fileName);
 			FileOutputStream f= new FileOutputStream(file);
@@ -73,24 +87,28 @@ public class GestionServeur {
 	
 	
 
+	/**
+	 * Charge le profil utilisateur. Si il n'y en a pas demande d'en créer un
+	 */
 	public void loadUser() {
 		Properties prop=new Properties();
-		try {			
+					
 			File file=new File(fileName);
-			if(file.exists()) {
-		        FileInputStream in = new FileInputStream(file); 	  
-		        prop.load(in);	 
-		        String userName=prop.getProperty(USER2);		       
-		        if(!userName.isEmpty()) {
-		        	 user=new User(userName);	
-		        	 changeAlluserServers();
-		        }else {
-		        	createUser();
-				}	    
+			if(file.exists()) {	        	  
+		        try {
+		        	FileInputStream in = new FileInputStream(file); 
+					prop.load(in);
+					String userName=prop.getProperty(USER2);
+					 maxIp=Integer.parseInt(prop.getProperty("maxIp"));					 
+					 if(!userName.isEmpty()) {
+			        	 user=new User(userName);	
+			        	 changeAlluserServers();
+			        }    
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		       
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
 				
 	}
 	
