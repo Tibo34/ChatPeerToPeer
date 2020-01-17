@@ -173,12 +173,6 @@ public class Server implements Runnable {
 	}
 
 
-	public void restartServer(int p) {
-		
-		server=Utility.getServerSocketPortFree(p);
-		frame.setPort(p);
-		
-	}
 	
 	
 	

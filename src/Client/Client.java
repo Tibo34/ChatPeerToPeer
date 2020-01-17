@@ -43,7 +43,7 @@ public class Client{
 
 	public void ConnectionRetour() {			
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
-		  send=Utility.getFreePort(receve.getLocalPort()+1,addr);		
+		  send=Utility.getFreePort(receve.getLocalPort(),addr);		
 		  ConnectionSender();		 			  
 	}
 
@@ -67,8 +67,7 @@ public class Client{
 	
 	public void ConnectionInitSender(AdressNetWork addr) {
 		try {
-			System.out.println(addr.getAdress().getHostAddress());
-			ControllerChat.getController().getServe().restartServer(6001);			
+			System.out.println(addr.getAdress().getHostAddress());						
 			send=new Socket(addr.getAdress().getHostAddress(),6000);			
 			ConnectionSender();						
 		} catch (UnknownHostException e) {			
