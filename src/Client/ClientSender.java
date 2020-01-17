@@ -37,8 +37,7 @@ public class ClientSender implements Runnable{
 		        return true;
 		    }catch(IOException ioexception){
 		    	ioexception.printStackTrace();
-		    	Frame frame=(Frame) ControllerChat.getController().getFrame();
-		    	frame.showMessage("\n ERROR: Message cant send");
+		    	Frame frame=(Frame) ControllerChat.getController().getFrame();		    	
 		    	return false;
 		    }
 		}

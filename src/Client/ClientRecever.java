@@ -55,6 +55,7 @@ public class ClientRecever implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("recever ok");
 		while(socketRecever.isConnected()) {
 			try {
 				receveMessage();
@@ -66,6 +67,7 @@ public class ClientRecever implements Runnable {
 				e.printStackTrace();
 			}
 		}		
+		System.out.println("socket close");
 	}
 	
 	public String getMessage() {

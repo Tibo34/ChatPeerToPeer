@@ -89,15 +89,6 @@ public class Frame extends JFrame implements WindowListener {
 	   }
 	 }
 	 
-	// update the chat window (GUI)
-	public void showMessage(final String text){
-	    SwingUtilities.invokeLater(
-	            new Runnable(){
-	                public void run(){
-	                    //theChatWindow.append(text);
-	                }
-	      });
-	}
 
 	private void initFrameComponent() {
 		boxModelAdress=new DefaultComboBoxModel<AdressNetWork>();
