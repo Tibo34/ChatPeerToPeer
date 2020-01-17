@@ -60,8 +60,7 @@ public class Client{
 	}	
 
 	public void ConnectionSender() {
-		  sender=new ClientSender(send);	
-		  sender.setUser(user);
+		  sender=new ClientSender(send,user);		  
 		  clientSender=new Thread(sender);
 		  clientSender.start();
 	}

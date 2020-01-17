@@ -12,8 +12,9 @@ public class ClientSender implements Runnable{
 	private ObjectOutputStream output; // stream data out
 	private User user;
 	
-	public ClientSender(Socket socket) {		
+	public ClientSender(Socket socket,User u) {		
 		socketSend=socket;		
+		user=u;
 		try {
 			setupStreams();
 			sendMessage(" user: "+user+", connecté");

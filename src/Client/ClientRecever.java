@@ -35,6 +35,7 @@ public class ClientRecever implements Runnable {
 				String name=message.split(",")[0].split(":")[1];
 				name.trim();
 				userConnect=new User(name);
+				System.out.println(userConnect);
 				ControllerChat.getController().getFrame().addUser(userConnect);
 				ControllerChat.getController().getFrame().editable();
 			}
