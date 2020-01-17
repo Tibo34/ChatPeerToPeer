@@ -83,13 +83,13 @@ public class Server implements Runnable {
 	    try {	    	
 	        connection = server.accept();	
 	        lastClient=gestion.getLastClient();
-	        if(lastClient.getReceve()==null) {
-	        	System.out.println("déjà un client");
-	        	lastClient.setReceve(connection);	        	
-	        }else {
+	        if(lastClient==null) {
 	        	System.out.println("pas de client");
 	        	lastClient=new Client(connection,user,this);
-		        controller.addClient(lastClient);
+		        controller.addClient(lastClient);	        		        	
+	        }else {
+	        	System.out.println("déjà un client");
+	        	lastClient.setReceve(connection);
 	        }	        
 	        gestion.createServer();	
 	        serverOpen=false;	       
