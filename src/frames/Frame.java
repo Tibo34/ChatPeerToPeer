@@ -48,7 +48,7 @@ public class Frame extends JFrame implements WindowListener {
 	private LabelListUser listusers;
 	private ArrayList<AdressNetWork> ipsConnect;
 	private DefaultComboBoxModel<AdressNetWork> boxModelAdress;
-	private int portLocal;
+	private int portLocal=6000;
 	private JList<User> usersJList;
  	private JTextPane infoReseau; 
  	private JComboBox<AdressNetWork> boxAdress;
@@ -75,10 +75,8 @@ public class Frame extends JFrame implements WindowListener {
 			userLocal=user;		
 			addUser(userLocal);	
 		}			
-		initFrameComponent();		
+		initFrameComponent();	
 	}
-	
-	
 	
 	
 	 public void addUser(User u) {	
@@ -136,7 +134,7 @@ public class Frame extends JFrame implements WindowListener {
 		JMenu mnNewMenu_1 = new JMenu("User");
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem menuItemUser = new JMenuItem("Créer User");
+		JMenuItem menuItemUser = new JMenuItem("Crï¿½er User");
 		menuItemUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createUser();	

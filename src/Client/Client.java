@@ -20,15 +20,15 @@ public class Client{
 	   private Server server;	   
   
 	/**
-	 * générer un client avec une socket
+	 * gï¿½nï¿½rer un client avec une socket
 	 * @param socket Socket de connection client
 	 * @param u Utilisateur local
-	 * @param s Server utilisé
+	 * @param s Server utilisï¿½
 	 */
 	public Client(Socket socket,User u, Server s) {
 		  this(u, s);
 		  receve=socket;		 
-		  System.out.println("Client connecté");		  
+		  System.out.println("Client connectï¿½");		  
 		  ConnectionRetour();
 		  createReceverClient();		 
 	   }
@@ -36,7 +36,7 @@ public class Client{
 	/**
 	 * initialisation de l'user et du serveur
 	 * @param u Utilisateur local
-	 * @param s Server utilisé
+	 * @param s Server utilisï¿½
 	 */
 	public Client(User u,Server s) {
 		 user=u;
@@ -47,7 +47,7 @@ public class Client{
 	/**
 	 * @param addr Adresse de connection
 	 * @param u Utilisateur local
-	 * @param s Server utilisé
+	 * @param s Server utilisï¿½
 	 */
 	public Client(AdressNetWork addr,User u,Server s) {
 		this(u, s);
@@ -55,7 +55,7 @@ public class Client{
 	}
 
 	/**
-	 * Lorsque le serveur reçoit une connection, il demande une nouvelle connection à cette même adresse sur le port suivant.
+	 * Lorsque le serveur reï¿½oit une connection, il demande une nouvelle connection ï¿½ cette mï¿½me adresse sur le port suivant.
 	 */
 	public void ConnectionRetour() {			
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();

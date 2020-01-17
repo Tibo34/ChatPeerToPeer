@@ -90,7 +90,7 @@ public class Server implements Runnable {
 	
 	@Override
 	public void run() {		
-		System.out.println("Serveur lancé");
+		System.out.println("Serveur lancï¿½");
 		serverOpen=true;	
 		while(serverOpen) {				
 			waitForConnection(); 					 
@@ -137,6 +137,8 @@ public class Server implements Runnable {
 	public void setThreadServer(Thread threadServer) {
 		this.threadServer = threadServer;
 	}
+
+
 	
 	
 
