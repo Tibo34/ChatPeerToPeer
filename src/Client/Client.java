@@ -1,4 +1,5 @@
 package Client;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -28,7 +29,7 @@ public class Client{
 	public Client(Socket socket,User u, Server s) {
 		  this(u, s);
 		  receve=socket;		 
-		  System.out.println("Client connectï¿½");		  
+		  System.out.println("Client connecté");		  
 		  ConnectionRetour();
 		  createReceverClient();		 
 	   }
@@ -36,7 +37,7 @@ public class Client{
 	/**
 	 * initialisation de l'user et du serveur
 	 * @param u Utilisateur local
-	 * @param s Server utilisï¿½
+	 * @param s Server utilisé
 	 */
 	public Client(User u,Server s) {
 		 user=u;
@@ -47,7 +48,7 @@ public class Client{
 	/**
 	 * @param addr Adresse de connection
 	 * @param u Utilisateur local
-	 * @param s Server utilisï¿½
+	 * @param s Server utilisé
 	 */
 	public Client(AdressNetWork addr,User u,Server s) {
 		this(u, s);
@@ -80,9 +81,14 @@ public class Client{
 	   
 	
 	public void ConnectionInitSender(AdressNetWork addr) {
-		send=GestionServeur.getGestionServer().connectionSender(addr);
-		System.out.println(addr.getAdress().getHostAddress());					
-		ConnectionSender();
+		try {
+			send=GestionServeur.getGestionServer().connectionSender(addr,server.getServer().getLocalPort());
+			ConnectionSender();
+		} catch (IOException e) {			
+			e.printStackTrace();
+			System.err.println("echec de la connection");
+		}						
+		
 	}
 	   
 	   public void sendMessage(String str) {
@@ -107,8 +113,7 @@ public class Client{
 			closeSocket();
 			closethread();
 			ControllerChat.getController().removeClient(this);
-			server.connectionClose();
-			
+			server.connectionClose();			
 		}
 
 

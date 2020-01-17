@@ -216,9 +216,9 @@ public class ScannerLan {
 
 
 
-		public Socket connect(AdressNetWork addr) {
-			// TODO Auto-generated method stub
-			return null;
+		public Socket connect(AdressNetWork addr,int port) throws IOException {
+			Socket socket=new Socket(addr.getAdress(),port);
+			return socket;
 		}
 	    
 	   

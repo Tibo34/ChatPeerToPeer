@@ -126,8 +126,8 @@ public class GestionServeur {
 		createServer();
 	}
 	
-	public Socket connectionSender(AdressNetWork addr) {
-		Socket send=scanNetWork.connect(addr);
+	public Socket connectionSender(AdressNetWork addr,int port) throws IOException {
+		Socket send=scanNetWork.connect(addr,port);
 		return send;
 	}
 
