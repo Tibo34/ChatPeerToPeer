@@ -79,7 +79,7 @@ public class Client{
 	}
 	   
 	   public void sendMessage(String str) {
-		   sender.sendMessage(userConnect.toString()+" : "+str);			
+		   sender.sendMessage(str);			
 		}
 	   
 		public void closeChat(){
