@@ -25,8 +25,9 @@ public class Client{
     * génère un client avec une socket
 	 * @param s Socket
 	 */
-	public Client(Socket s) {
+	public Client(Socket s,User u) {
 		  receve=s;		
+		  user=u;
 		  System.out.println("Client connecté");
 		  ConnectionRetour();
 		  createReceverClient();		 

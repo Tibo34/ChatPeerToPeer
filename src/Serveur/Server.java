@@ -104,8 +104,7 @@ public class Server implements Runnable {
 	    try {
 	        connection = server.accept();
 	        if(lastClient==null) {
-	        	lastClient=new Client(connection);	 
-	        	lastClient.setUser(user);
+	        	lastClient=new Client(connection,user);	 	        	
 	        }else {
 	        	System.out.println("client retour");	        	
 	 	        lastClient.initConnectionReceve(connection);
