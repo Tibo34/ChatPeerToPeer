@@ -82,8 +82,15 @@ public class Server implements Runnable {
 	private void waitForConnection(){	 
 	    try {	    	
 	        connection = server.accept();	
-	        lastClient=new Client(connection,user,this);
-	        controller.addClient(lastClient);
+	        lastClient=gestion.getLastClient();
+	        if(lastClient.getReceve().isClosed()) {
+	        	System.out.println("déjà un client");
+	        	lastClient.setReceve(connection);	        	
+	        }else {
+	        	System.out.println("pas de client");
+	        	lastClient=new Client(connection,user,this);
+		        controller.addClient(lastClient);
+	        }	        
 	        gestion.createServer();	
 	        serverOpen=false;	       
 	    } catch (IOException ioexception) {

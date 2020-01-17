@@ -20,7 +20,10 @@ public class GestionServeur {
 	
 	private ArrayList<Server> servers;
 	private Server lastServer;
+	private Client lastClient;
 	private Frame frame;
+	
+
 	private ArrayList<AdressNetWork> ipsConnect;	
 	private ScannerLan scanNetWork;
 	private User user;
@@ -122,7 +125,7 @@ public class GestionServeur {
 	}
 
 	public void connection(AdressNetWork addr) {
-		Client lastClient=new Client(addr,user,lastServer);		
+		lastClient=new Client(addr,user,lastServer);		
 		controller.addClient(lastClient);	
 		createServer();
 	}
@@ -142,6 +145,13 @@ public class GestionServeur {
 		return user;
 	}
 	
+	public Client getLastClient() {
+		return lastClient;
+	}
+
+	public void setLastClient(Client lastClient) {
+		this.lastClient = lastClient;
+	}
 	
 	
 	
