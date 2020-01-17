@@ -80,7 +80,8 @@ public class GestionServeur {
 		        prop.load(in);	 
 		        String userName=prop.getProperty(USER2);		       
 		        if(!userName.isEmpty()) {
-		        	 user=new User(userName);		        	 
+		        	 user=new User(userName);	
+		        	 changeAlluserServers();
 		        }else {
 		        	createUser();
 				}	    
