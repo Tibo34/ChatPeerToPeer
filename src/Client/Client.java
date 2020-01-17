@@ -44,18 +44,19 @@ public class Client{
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
 		  send=Utility.getFreePort(receve.getLocalPort(),addr);		
 		  ConnectionSender();
-		  echangeUser();			  
+		 			  
 	}
 
 	private void createReceverClient() {
 		  recever=new ClientRecever(receve);
 		  clientRecever=new Thread(recever);
 		  clientRecever.start();
+		  echangeUser();
 	}
 	
 	public void initConnectionReceve(Socket socket) {
 		receve=socket;
-		createReceverClient();
+		createReceverClient();		
 	}
 	
 	private void echangeUser() {
