@@ -21,18 +21,12 @@ public class Server implements Runnable {
 	private Thread threadServer;
 	private GestionServeur gestion;		
 	private static int portStart=6000;
-	private boolean serverOpen;
-
-	
-	
+	private boolean serverOpen;	
 	
 	
 	public Server(GestionServeur g,User u) {
 		this(g,u,portStart);		
 	}
-	
-	
-
 
 	public Server(GestionServeur g, User u, int localPort) {
 		user=u;

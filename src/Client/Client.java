@@ -59,7 +59,9 @@ public class Client{
 	 * Lorsque le serveur re�oit une connection, il demande une nouvelle connection � cette m�me adresse sur le port suivant.
 	 */
 	public void ConnectionRetour() {			
+		
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
+		  System.out.println(addr+" "+receve.getLocalPort());
 		  send=ScannerLan.getFreePort(receve.getLocalPort()+1,addr);			  
 		  ConnectionSender();		 			  
 	}
@@ -75,8 +77,7 @@ public class Client{
 		createReceverClient();		
 	}	
 
-	public void ConnectionSender() {
-			System.out.println(user);
+	public void ConnectionSender() {			
 		  sender=new ClientSender(send,user,this);			 
 	}
 	   
