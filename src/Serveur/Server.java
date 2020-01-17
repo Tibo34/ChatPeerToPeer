@@ -94,8 +94,7 @@ public class Server implements Runnable {
 	}
 	
 	public void connection(AdressNetWork addr) {		
-		lastClient=new Client(addr);		
-		lastClient.setUser(user);
+		lastClient=new Client(addr,user);		
 		controller.addClient(lastClient);
 	}
 	

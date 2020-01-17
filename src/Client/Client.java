@@ -36,15 +36,15 @@ public class Client{
 	public Client() {}	  
 
 
-	public Client(AdressNetWork addr) {
+	public Client(AdressNetWork addr,User u) {
+		user=u;
 		ConnectionInitSender(addr);
 	}
 
 	public void ConnectionRetour() {			
 		  InetAddress addr = ((InetSocketAddress) receve.getRemoteSocketAddress()).getAddress();
 		  send=Utility.getFreePort(receve.getLocalPort(),addr);		
-		  ConnectionSender();
-		 			  
+		  ConnectionSender();		 			  
 	}
 
 	private void createReceverClient() {
