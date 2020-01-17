@@ -45,7 +45,7 @@ public class Frame extends JFrame implements WindowListener {
  	private DefaultListModel<Message> messageListModel; 
  	private User userLocal;
  	private JSplitPane splitCenter;
- 	private JSplitPane splitNorth;
+ 	private JPanel splitNorth;
  	private JPanel panelSouth;
  	
  	private GestionServeur gestion;
@@ -53,6 +53,7 @@ public class Frame extends JFrame implements WindowListener {
 	/**
 	 * Create the frame.
 	 * @param user 
+	 * @wbp.parser.constructor
 	 */
 	public Frame(ArrayList<AdressNetWork> ips, User user) { 
 		this(ips);
@@ -61,6 +62,9 @@ public class Frame extends JFrame implements WindowListener {
 		}				
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public Frame(ArrayList<AdressNetWork> ips) {		
 		ipsConnect=ips;		
 		users=new ArrayList<User>();		
@@ -135,7 +139,7 @@ public class Frame extends JFrame implements WindowListener {
 		JMenu mnNewMenu_1 = new JMenu("User");
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem menuItemUser = new JMenuItem("Crï¿½er User");
+		JMenuItem menuItemUser = new JMenuItem("Créer User");
 		menuItemUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createUser();	
@@ -169,27 +173,22 @@ public class Frame extends JFrame implements WindowListener {
 		panelSouth.add(inputUser);
 		inputUser.setColumns(10);
 		
-		splitNorth = new JSplitPane();
+		splitNorth = new JPanel();
 		contentPane.add(splitNorth, BorderLayout.NORTH);
-		
-		infoReseau = new JTextPane();
-		infoReseau.setText(" port :"+portLocal);
-		
-		splitNorth.setLeftComponent(infoReseau);
-		
+		splitNorth.add(boxAdress);
 			
-		splitNorth.setRightComponent(boxAdress);
 		
-		splitCenter = new JSplitPane();
+		
+		splitCenter = new JSplitPane();		
 		contentPane.add(splitCenter, BorderLayout.CENTER);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setEnabled(false);
-		splitCenter.setRightComponent(scrollPane);
+		splitCenter.setRightComponent(scrollPane);		
 		messageListModel=new DefaultListModel<Message>();
 		userMessageJList = new JList<Message>(messageListModel);
 		scrollPane.setViewportView(userMessageJList);
-		
+		splitCenter.setDividerLocation(50);
 		
 		usersJList.setVisibleRowCount(20);
 		

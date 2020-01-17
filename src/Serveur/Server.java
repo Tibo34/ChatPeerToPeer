@@ -69,8 +69,7 @@ public class Server implements Runnable {
 	}
 	
 	@Override
-	public void run() {		
-		System.out.println("Serveur lancé");
+	public void run() {				
 		serverOpen=true;	
 		while(serverOpen) {				
 			waitForConnection(); 					 
@@ -83,12 +82,10 @@ public class Server implements Runnable {
 	    try {	    	
 	        connection = server.accept();	
 	        lastClient=gestion.getLastClient();
-	        if(lastClient==null) {
-	        	System.out.println("pas de client");
+	        if(lastClient==null) {	        	
 	        	lastClient=new Client(connection,user,this);
 		        controller.addClient(lastClient);	        		        	
-	        }else {
-	        	System.out.println("déjà un client");
+	        }else {	        	
 	        	lastClient.setReceve(connection);
 	        }	        
 	        gestion.createServer();	

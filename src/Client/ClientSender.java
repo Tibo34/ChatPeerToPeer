@@ -30,8 +30,7 @@ public class ClientSender{
 	
 	// send message to the client
 		public boolean sendMessage(String message){
-		    try{
-		    	System.out.println("message send  : "+message);
+		    try{		    	
 		        output.writeObject(message);
 		        output.flush(); 
 		        return true;

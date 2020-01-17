@@ -33,8 +33,7 @@ public class GestionServeur {
 	private static final String USER2 = "user";	
 
 	private GestionServeur() {
-		super();
-		System.out.println("Gestion Serveur");
+		super();	
 		this.servers = new ArrayList<Server>();
 		createServer();
 		scanNetWork=new ScannerLan();		
